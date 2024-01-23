@@ -64,7 +64,7 @@
             <div class="center">
                 <h2 class="form-title" id="login">Log in</h2>
                 <div class="form-holder">
-                    <input name="email_l" type="email" class="input" placeholder="Email" value="<?= isset($_SESSION['input_values']['email']) ? htmlspecialchars($_SESSION['input_values']['email']) : "" ?>"/>
+                    <input name="email_l" type="email" class="input" placeholder="Email" value="<?= isset($_SESSION['input_value']['email']) ? htmlspecialchars($_SESSION['input_value']['email']) : "" ?>"/>
                     <input name="password_l" type="password" class="input" placeholder="Password" />
                 </div>
                 <button type="submit" name="signin" class="submit-btn">Log in</button>

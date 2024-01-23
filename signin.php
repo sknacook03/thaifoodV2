@@ -26,9 +26,21 @@
             header("location:login.php");
         }else if(empty($password)){
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
+            $_SESSION['input_value'] = [
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'email' => $email,
+                'number' => $number,
+            ];
             header("location:login.php");
         }else if(strlen($_POST['password_l']) < 5){
             $_SESSION['error'] = 'รหัสผ่านต้องมีความยาวมากกว่า 5 ตัวอักษร';
+            $_SESSION['input_value'] = [
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'email' => $email,
+                'number' => $number,
+            ];
             header("location:login.php");
         }else{
             try{
