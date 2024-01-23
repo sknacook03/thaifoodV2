@@ -8,9 +8,21 @@
 
         if(empty($email)){
             $_SESSION['error'] = 'กรุณากรอกอีเมล';
+            $_SESSION['input_value'] = [
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'email' => $email,
+                'number' => $number,
+            ];
             header("location:login.php");
         }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
+            $_SESSION['input_value'] = [
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'email' => $email,
+                'number' => $number,
+            ];
             header("location:login.php");
         }else if(empty($password)){
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
@@ -36,6 +48,12 @@
                             }
                         }else{
                             $_SESSION['error'] = 'รหัสผ่านผิด';
+                            $_SESSION['input_value'] = [
+                                'firstname' => $firstname,
+                                'lastname' => $lastname,
+                                'email' => $email,
+                                'number' => $number,
+                            ];
                             header("location:login.php");
                         }
                     }else{
@@ -44,6 +62,12 @@
                     }
                 }else{
                     $_SESSION['error'] = "ไม่มีข้อมูลในระบบ!";
+                    $_SESSION['input_value'] = [
+                        'firstname' => $firstname,
+                        'lastname' => $lastname,
+                        'email' => $email,
+                        'number' => $number,
+                    ];
                     header("location:login.php");
                 }
             }catch(PDOException $e){
