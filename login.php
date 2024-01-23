@@ -49,11 +49,11 @@
              </div>
             <h2 class="form-title" id="signup"><span></span>Sign up</h2>
             <div class="form-holder">
-            <input required name="firstname" id="firstname" type="text" class="input" placeholder="FirstName" value="<?= htmlspecialchars($_POST["firstname"] ?? "") ?>" />
-            <input required name="lastname" id="lastname" type="text" class="input" placeholder="LastName" value="<?= htmlspecialchars($_POST["lastname"] ?? "") ?>" />
-            <input required name="email" id="email" type="email" class="input" placeholder="Email" value="<?= htmlspecialchars($_POST["email"] ?? "") ?>" />
-            <input required name="number" id="number" type="text" class="input" placeholder="TelephoneNumber" value="<?= htmlspecialchars($_POST["number"] ?? "") ?>" />
-             <input required name="password" type="password" class="input" placeholder="Password" value="" />
+            <input  name="firstname" id="firstname" type="text" class="input" placeholder="FirstName" value="<?= isset($_SESSION['input_values']['firstname']) ? htmlspecialchars($_SESSION['input_values']['firstname']) : "" ?>" />
+            <input  name="lastname" id="lastname" type="text" class="input" placeholder="LastName" value="<?= isset($_SESSION['input_values']['lastname']) ? htmlspecialchars($_SESSION['input_values']['lastname']) : "" ?>" />
+            <input  name="email" id="email" type="email" class="input" placeholder="Email" value="<?= isset($_SESSION['input_values']['email']) ? htmlspecialchars($_SESSION['input_values']['email']) : "" ?>" />
+            <input  name="number" id="number" type="text" class="input" placeholder="TelephoneNumber" value="<?= isset($_SESSION['input_values']['number']) ? htmlspecialchars($_SESSION['input_values']['number']) : "" ?>" />
+            <input  name="password" type="password" class="input" placeholder="Password" value="" />
 
             </div>
             <button type="submit" name="signup" class="submit-btn" onclick="saveInputValues()">Sign up</button>
