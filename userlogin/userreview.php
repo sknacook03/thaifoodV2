@@ -113,8 +113,24 @@
                         <div class="con-pro">
                             <p><img src="../assets/images/profile-header.jpg" alt=""> <?php echo $review['firstname']?> <span> - <?php echo date('d M Y H:i น.', strtotime($review['date']));?></span></p>
                         </div>
+                        <div class="iconn">
                         <div class="comments">
                             <p><?php echo $review['comment'];?></p>
+                        </div>
+                        <div class="gapzone">
+                        <?php
+                            if(isset($_SESSION['user_login']) && $review['userID'] == $_SESSION['user_login']){
+                            ?>
+                            <a href="edit_comment.php?comment_id=<?php echo $review['idReview']; ?>">
+                            <img src="../assets/images/edit.png" class="edit-logo" >
+                          </a>
+                            <a href="delete_comment.php?delete_comment=<?php echo $review['idReview']; ?>">
+                            <img src="../assets/images/delete.png" class="edit-logo">
+                          </a>
+                            <?php 
+                            }
+                            ?>
+                        </div>
                         </div>
                     </div>
                     <?php

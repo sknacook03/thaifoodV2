@@ -53,9 +53,11 @@
                         if(password_verify($password, $row['password'])){
                             if($row['role'] == 'admin'){
                                 $_SESSION['admin_login'] = $row['userID'];
+                                unset($_SESSION['input_value']);
                                 header("location:admin-index.php");
                             }else{
                                 $_SESSION['user_login'] = $row['userID'];
+                                unset($_SESSION['input_value']);
                                 header("location:userlogin/userIndex.php");
                             }
                         }else{

@@ -1227,6 +1227,14 @@ Comments Style
   width: 32px;
   border-radius: 100%;
 }
+.iconn{
+  display: flex;
+  justify-content: space-between;
+}
+.edit-logo{
+  height: 25px;
+  width: 25px;
+}
 .con-comments .profile-com img{
   object-fit: cover;
   height: 32px;

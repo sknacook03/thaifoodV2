@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once("config.php");
+    unset($_SESSION['input_values']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

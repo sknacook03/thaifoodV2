@@ -17,7 +17,6 @@
         $pcm->bindParam(":date", $date, PDO::PARAM_STR);
         $pcm->execute();
             if($pcm){
-                $_SESSION['success'] = "บันทึกข้อมูลเรียบร้อยแล้ว";
                 header("location:userreview.php");
             } else {
                 $_SESSION['error'] = "ไม่สามารถบันทึกข้อมูลได้";

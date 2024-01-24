@@ -81,7 +81,7 @@
                       <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
                       <li><a href="userreview.php">รีวิวลูกค้า</a></li>
                      <!-- <li><a></a></li> -->
-                      <li><a><?php echo $row['firstname']?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
+                      <li><a><?php echo  $row['firstname']?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
                     </ul>   
                     <a href="../logout.php" class="btn btn-danger mb-5 mt-1">logout</a>
                     <a class='menu-trigger'>
