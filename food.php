@@ -63,7 +63,7 @@
                     <!-- ***** Search End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="index.html">หน้าแรก</a></li>
+                        <li><a href="index.php">หน้าแรก</a></li>
                         <li><a href="food.html" class="active">อาหาร</a></li>
                         <li><a href="drink.php">เครื่องดื่ม</a></li>
                         <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
@@ -200,7 +200,7 @@
                     <img class="zoom" src="food/uploads/<?= $food['img']; ?>" alt="">
                     <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
                     <ul>
-                      <li><i class="fa fa-star"></i> <?= $food['price']; ?>-.</li>
+                      <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
                     </ul>
                   </div>
                 </div>

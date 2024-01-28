@@ -111,9 +111,11 @@
             ];
             header("location:login.php");
         }else{
+            
             try{
-                $check_email = $conn->prepare("SELECT email FROM users WHERE email = :email");
+                $check_email = $conn->prepare("SELECT * FROM users WHERE email = :email OR number = :number");
                 $check_email->bindParam(":email",$email);
+                $check_email->bindParam(":number",$number);
                 $check_email->execute();
                 $row =  $check_email->fetch(PDO::FETCH_ASSOC);
                 if($row['email'] == $email){
@@ -124,8 +126,17 @@
                         'email' => $email,
                         'number' => $number,
                     ];
-                    header("location:login.php");
-                }else if(!isset($_POST['error'])){
+                    header("location:login.php");   
+                }else if($row['number'] == $number){
+                        $_SESSION['warning'] = 'เบอร์นี้ถูกใช้งานแล้ว';
+                        $_SESSION['input_values'] = [
+                            'firstname' => $firstname,
+                            'lastname' => $lastname,
+                            'email' => $email,
+                            'number' => $number,
+                        ];
+                        header("location:login.php");
+                } else if(!isset($_POST['error'])){
                     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $conn->prepare("INSERT INTO users(firstname, lastname, email, number, password, role)
                                             VALUES(:firstname, :lastname, :email, :number, :password, :role)");

@@ -160,7 +160,7 @@
                   </div>
                   <div class="item">
                     <div class="thumb">
-                      <img src="../assets/images/showfood-01.jpg" alt="">
+                      <img src="../assets/images/showfood-03.jpg" alt="">
                       <div class="hover-effect">
                         <h6>แนะนำ</h6>
                       </div>

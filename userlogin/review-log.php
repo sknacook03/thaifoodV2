@@ -26,7 +26,7 @@
     }else if(isset($_POST['cancel'])){
         header("location:userreview.php");
     }
-    $stmt = $conn->prepare("SELECT * FROM comments ORDER BY created_at DESC");
-    $stmt->execute();
-    $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // $stmt = $conn->prepare("SELECT * FROM comments ORDER BY created_at DESC");
+    // $stmt->execute();
+    // $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
