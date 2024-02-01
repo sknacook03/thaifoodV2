@@ -136,6 +136,29 @@ body .page-content {
   padding: 60px;
   border-radius: 23px;
 }
+body .page-content .nav-manu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -25px;
+    margin-bottom: 30px;
+    & li{
+      padding-left: 60px;
+      & a{
+        color: #ffffff;
+        font-size: 20px;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        padding-bottom: 10px;
+        transition: all 0.3s ease 0s;
+        &:hover{
+          color: #DFA006;
+          border-bottom: 2px solid #DFA006;
+          padding-bottom: 0;
+        }
+      }
+  }
+}
 
 p {
   font-size: 15px;
@@ -1288,8 +1311,11 @@ Comments Style
     }
   }
 }
-
-
+/* 
+---------------------------------------------
+ืNavbarManu Style
+--------------------------------------------- 
+*/
 
 /* 
 ---------------------------------------------

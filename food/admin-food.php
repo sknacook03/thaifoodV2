@@ -144,17 +144,17 @@
   <div class="container">
     <div class="row">
         <div class="page-content">
-            <div class="col-md-12">
+            <div class="col-md-12 d-flex mb-3">
               <h2>Food</h2>
-            </div>
-            <div class="col-md-12 d-flex justify-content-end">
+              <div class="col-md-11 d-flex justify-content-end">
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>
+            </div>
             </div>
             <!-- food data -->
             <table class="table table-dark table-striped">
                 <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
                   <th scope="col">ชื่ออาหาร</th>
                   <th scope="col">ประเภทอาหาร</th>
                   <th scope="col">ราคา</th>

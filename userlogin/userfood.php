@@ -97,7 +97,12 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="page-content">
-
+        <div class="nav-manu">
+          <li><a href="#section2">ประเภทตำ</a></li>
+          <li><a href="#section1">ประเภทต้ม</a></li>
+          <li><a href="#section4">ประเภทผัด</a></li>
+          <li><a href="#section3">ประเภททอด</a></li>
+          </div>
           <!-- ***** Featured Games Start ***** -->
           <div class="row">
             <div class="col-lg-8">
@@ -189,43 +194,146 @@
           </div>
           <!-- ***** Featured Games End ***** -->
          <!-- ***** Most Popular Start ***** -->
-         <div class="most-popular">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="heading-section">
-                <h4><em>อาหาร</em></h4>
-              </div>
-              <div class="row text-white">
-              <?php
-                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
-                  $stmt->execute();
-                  $foods = $stmt->fetchAll();
-                    if(!$foods){
-                      echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
-                    }else{
-                      foreach ($foods as $food){
-                   
-                ?>
-                <div class="col-lg-3 col-sm-6">
-                  <div class="item">
-                    <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                    <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i> <?= $food['price']; ?>-.</li>
-                    </ul>
-                  </div>
+        <!-- *****ประเภทต้ม***** -->
+        <?php
+        
+        $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+        $stmt->execute();
+        $foods = $stmt->fetchAll();
+          if(!$foods){
+            echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
+          }else{
+            foreach ($foods as $food){  
+      ?>
+        <?php
+        if($food['type'] == '01'){
+        ?>
+        <div class="most-popular" id="section1">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>ประเภทต้ม</em></h4>
+            </div>
+            <div class="row text-white">
+              <div class="col-lg-3 col-sm-6">
+                <div class="item">
+                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                  <ul>
+                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                  </ul>
                 </div>
-                <?php   }
-                      } ?>
-                <div class="col-lg-12">
-                  <div class="main-button">
-                    <a href="#top">กลับไปด้านบน</a>
-                  </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="main-button">
+                  <a href="#top">กลับไปด้านบน</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        </div>
+        <?php
+        }
+        ?>
+        <!-- *****ประเภทตำ***** -->
+        <?php
+        if($food['type'] == '02'){
+        ?>
+        <div class="most-popular" id="section2">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>ประเภทตำ</em></h4>
+            </div>
+            <div class="row text-white">
+              <div class="col-lg-3 col-sm-6">
+                <div class="item">
+                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                  <ul>
+                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="main-button">
+                  <a href="#top">กลับไปด้านบน</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <?php
+        }
+        ?>
+        <!-- *****ประเภททอด***** -->
+        <?php
+        if($food['type'] == '03'){
+        ?>
+        <div class="most-popular" id="section3">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>ประเภททอด</em></h4>
+            </div>
+            <div class="row text-white">
+              <div class="col-lg-3 col-sm-6">
+                <div class="item">
+                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                  <ul>
+                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="main-button">
+                  <a href="#top">กลับไปด้านบน</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <?php
+        }
+        ?>
+        <!-- *****ประเภทผัด***** -->
+        <?php
+        if($food['type'] == '04'){
+        ?>
+        <div class="most-popular"id="section4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>ประเภทผัด</em></h4>
+            </div>
+            <div class="row text-white">
+              <div class="col-lg-3 col-sm-6">
+                <div class="item">
+                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                  <ul>
+                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="main-button">
+                  <a href="#top">กลับไปด้านบน</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <?php
+        }
+        ?>
+        <?php  }
+          } ?>
         <!-- ***** Most Popular End ***** -->
 
       

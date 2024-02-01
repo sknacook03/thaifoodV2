@@ -96,7 +96,7 @@
       <div class="col-lg-12">
         <div class="page-content">
 
-        
+        <h2>Welcome,<?php echo $row['firstname']?></h2>
 
         </div>
       </div>

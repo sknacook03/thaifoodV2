@@ -121,7 +121,7 @@
                         <?php
                             if(isset($_SESSION['user_login']) && $review['userID'] == $_SESSION['user_login']){
                             ?>
-                            <a href="edit_comment.php?comment_id=<?php echo $review['idReview']; ?>">
+                            <a href="edit_comment.php?edit_comment=<?php echo $review['idReview']; ?>">
                             <img src="../assets/images/edit.png" class="edit-logo" >
                           </a>
                             <a href="delete_comment.php?delete_comment=<?php echo $review['idReview']; ?>">
