@@ -98,10 +98,10 @@
       <div class="col-lg-12">
         <div class="page-content">
         <div class="nav-manu">
-          <li><a href="#section2">ประเภทตำ</a></li>
-          <li><a href="#section1">ประเภทต้ม</a></li>
-          <li><a href="#section4">ประเภทผัด</a></li>
-          <li><a href="#section3">ประเภททอด</a></li>
+          <li><a href="#section02">ประเภทตำ</a></li>
+          <li><a href="#section01">ประเภทต้ม</a></li>
+          <li><a href="#section04">ประเภทผัด</a></li>
+          <li><a href="#section03">ประเภททอด</a></li>
           </div>
           <!-- ***** Featured Games Start ***** -->
           <div class="row">
@@ -111,83 +111,31 @@
                   <h4><em>แนะนำ</em> อาหาร</h4>
                 </div>
                 <div class="owl-features owl-carousel">
+                <?php
+        
+                      $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+                      $stmt->execute();
+                      $foods = $stmt->fetchAll();
+                            if(!$foods){
+                              echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
+                            }else{
+                              foreach ($foods as $food){  
+                        ?>
                   <div class="item">
                     <div class="thumb">
-                      <img src="../assets/images/showfood-01.jpg" alt="">
+                      <img src="../food/uploads/<?= $food['img']; ?>" alt="">
                       <div class="hover-effect">
                         <h6>แนะนำ</h6>
                       </div>
                     </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
+                    <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
                     <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
+                      <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
 
                     </ul>
                   </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../assets/images/showfood-02.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../assets/images/showfood-03.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../assets/images/showfood-04.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../assets/images/showfood-03.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../assets/images/showfood-02.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-                    </ul>
-                  </div>
+                  <?php  }
+                        } ?>
                 </div>
               </div>
             </div>
@@ -200,140 +148,46 @@
         $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
         $stmt->execute();
         $foods = $stmt->fetchAll();
-          if(!$foods){
-            echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
-          }else{
-            foreach ($foods as $food){  
-      ?>
-        <?php
-        if($food['type'] == '01'){
-        ?>
-        <div class="most-popular" id="section1">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="heading-section">
-              <h4><em>ประเภทต้ม</em></h4>
-            </div>
-            <div class="row text-white">
-              <div class="col-lg-3 col-sm-6">
-                <div class="item">
-                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                  <ul>
-                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="main-button">
-                  <a href="#top">กลับไปด้านบน</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-        <?php
+        $groupedFoods = [];
+        foreach ($foods as $food) {
+            $typeID = $food['type'];
+            if (!isset($groupedFoods[$typeID])) {
+                $groupedFoods[$typeID] = [];
+            }
+            $groupedFoods[$typeID][] = $food;
         }
+        
+        // แสดงทุกรายการในแต่ละกลุ่ม
+        foreach ($groupedFoods as $typeID => $typeFoods) {
         ?>
-        <!-- *****ประเภทตำ***** -->
-        <?php
-        if($food['type'] == '02'){
-        ?>
-        <div class="most-popular" id="section2">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="heading-section">
-              <h4><em>ประเภทตำ</em></h4>
-            </div>
-            <div class="row text-white">
-              <div class="col-lg-3 col-sm-6">
-                <div class="item">
-                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                  <ul>
-                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
-                  </ul>
+            <div class="most-popular" id="section<?= $typeID ?>">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="heading-section">
+                            <h4><em>ประเภท<?= $typeFoods[0]['typeName'] ?></em></h4>
+                        </div>
+                        <div class="row text-white">
+                            <?php foreach ($typeFoods as $food) { ?>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="item">
+                                        <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                                        <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                                        <ul>
+                                            <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="main-button">
+                                <a href="#top">กลับไปด้านบน</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="main-button">
-                  <a href="#top">กลับไปด้านบน</a>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-        </div>
-        <?php
-        }
-        ?>
-        <!-- *****ประเภททอด***** -->
-        <?php
-        if($food['type'] == '03'){
-        ?>
-        <div class="most-popular" id="section3">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="heading-section">
-              <h4><em>ประเภททอด</em></h4>
-            </div>
-            <div class="row text-white">
-              <div class="col-lg-3 col-sm-6">
-                <div class="item">
-                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                  <ul>
-                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="main-button">
-                  <a href="#top">กลับไปด้านบน</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-        <?php
-        }
-        ?>
-        <!-- *****ประเภทผัด***** -->
-        <?php
-        if($food['type'] == '04'){
-        ?>
-        <div class="most-popular"id="section4">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="heading-section">
-              <h4><em>ประเภทผัด</em></h4>
-            </div>
-            <div class="row text-white">
-              <div class="col-lg-3 col-sm-6">
-                <div class="item">
-                  <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                  <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                  <ul>
-                    <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="main-button">
-                  <a href="#top">กลับไปด้านบน</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-        <?php
-        }
-        ?>
-        <?php  }
-          } ?>
+        <?php } ?>
         <!-- ***** Most Popular End ***** -->
 
       

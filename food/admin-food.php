@@ -164,7 +164,7 @@
               </thead>
               <tbody>
                 <?php
-                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID ORDER BY id");
                   $stmt->execute();
                   $foods = $stmt->fetchAll();
                     if(!$foods){

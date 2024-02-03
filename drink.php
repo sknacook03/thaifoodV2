@@ -91,87 +91,35 @@
           <div class="row">
             <div class="col-lg-8">
               <div class="featured-games header-text">
-                <div class="heading-section"id="js-menu">
-                  <h4><em>แนะนำ</em> เครื่องดื่ม</h4>
+                <div class="heading-section" id="js-menu">
+                  <h4><em>แนะนำ</em> อาหาร</h4>
                 </div>
                 <div class="owl-features owl-carousel">
+                <?php
+        
+                      $stmt = $conn->query("SELECT * FROM drink JOIN type ON drink.type = type.typeID");
+                      $stmt->execute();
+                      $drinks = $stmt->fetchAll();
+                            if(!$drinks){
+                              echo "<tr><td colspan='6' class='text-center' style='color: white;'>No drink found</td></tr>";
+                            }else{
+                              foreach ($drinks as $drink){  
+                        ?>
                   <div class="item">
                     <div class="thumb">
-                      <img src="assets/images/showfood-01.jpg" alt="">
+                      <img src="drink/uploads/<?= $drink['img']; ?>" alt="">
                       <div class="hover-effect">
                         <h6>แนะนำ</h6>
                       </div>
                     </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
+                    <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
                     <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
+                      <li><i class="fa fa-star"></i> <?= $drink['price']; ?> .-</li>
 
                     </ul>
                   </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="assets/images/showfood-02.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="assets/images/showfood-03.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="assets/images/showfood-04.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="assets/images/showfood-01.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-
-                    </ul>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="assets/images/showfood-02.jpg" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4>อาหาร<br><span>อาหาร</span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i>  79-.</li>
-                    </ul>
-                  </div>
+                  <?php  }
+                        } ?>
                 </div>
               </div>
             </div>
