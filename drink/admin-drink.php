@@ -114,13 +114,18 @@
                     <div class="mb-3">
                       <label for="Name" class="col-form-label">ประเภทอาหาร:</label>
                       <select type="text"required class="form-control" name="type" >
-                      <option value="01">01 ต้ม</option>
-                      <option value="02">02 ตำ</option>
-                      <option value="03">03 ทอด</option>
-                      <option value="04">04 ผัด</option>
-                      <option value="05">05 นํ้าร้อน</option>
-                      <option value="06">06 นํ้าเย็น</option>
-                      <option value="07">07 นํ้าปั่น</option>
+                      <?php
+                        $stmt = $conn->query("SELECT * FROM type ORDER BY typeID");
+                        $stmt->execute();
+                        $types = $stmt->fetchAll();
+                          if(!$types){
+                            echo "<tr><td colspan='6' class='text-center'>No type found</td></tr>";
+                          }else{
+                            foreach ($types as $type){
+                    ?>
+                      <option value="<?= $type['typeID']?>"><?= $type['typeID']?> <?= $type['typeName']?></option>
+                      <?php   }
+                      } ?>
                       </select>
                     </div>
                     <div class="mb-3">

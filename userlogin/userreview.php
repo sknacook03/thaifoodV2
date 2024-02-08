@@ -97,10 +97,25 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="page-content">
-
+        <?php if(isset($_SESSION['error'])) {?>
+            <div class="alert alert-danger" role="alert">
+                <?php
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                ?>
+            </div>
+            <?php }?>
+            <?php if(isset($_SESSION['success'])) {?>
+            <div class="alert alert-success" role="alert">
+                <?php
+                    echo $_SESSION['success'];
+                    unset($_SESSION['success']);
+                ?>
+            </div>
+            <?php }?>
 
         <?php
-            $stmt = $conn->query("SELECT review.*, users.firstname, users.userID FROM review JOIN users ON review.userID = users.userID");
+            $stmt = $conn->query("SELECT review.*, users.firstname, users.userID FROM review JOIN users ON review.userID = users.userID ORDER BY idReview");
             $stmt->execute();
             $reviews = $stmt->fetchAll();
 
@@ -121,7 +136,7 @@
                         <?php
                             if(isset($_SESSION['user_login']) && $review['userID'] == $_SESSION['user_login']){
                             ?>
-                            <a href="edit_comment.php?edit_comment=<?php echo $review['idReview']; ?>">
+                            <a href="edit_comment.php?idReview=<?php echo $review['idReview']; ?>">
                             <img src="../assets/images/edit.png" class="edit-logo" >
                           </a>
                             <a href="delete_comment.php?delete_comment=<?php echo $review['idReview']; ?>">
@@ -140,22 +155,7 @@
 
 
             <form action="review-log.php" method="post">
-            <?php if(isset($_SESSION['error'])) {?>
-            <div class="alert alert-danger" role="alert">
-                <?php
-                    echo $_SESSION['error'];
-                    unset($_SESSION['error']);
-                ?>
-            </div>
-            <?php }?>
-            <?php if(isset($_SESSION['success'])) {?>
-            <div class="alert alert-success" role="alert">
-                <?php
-                    echo $_SESSION['success'];
-                    unset($_SESSION['success']);
-                ?>
-            </div>
-            <?php }?>
+          
           <div class="con-comments">
             <div class="profile-com">
               <p><img src="../assets/images/profile-header.jpg" alt=""> <?php echo $row['firstname']?></p>

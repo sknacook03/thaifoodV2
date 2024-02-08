@@ -111,81 +111,31 @@
                   <h4><em>เมนูแนะนำ</em> วันนี้</h4>
                 </div>
                 <div class="row">
+                <?php
+                    $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+                    $stmt->execute();
+                    $foods = $stmt->fetchAll();
+                          if(!$foods){
+                            echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
+                          }else{
+                            foreach ($foods as $food){  
+                              if($food['id'] <= 8){
+                      ?>
                   <div class="col-lg-3 col-sm-6">
                     <div class="item">
-                      <img class="zoom" src="assets/images/food-01.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
+                      <img class="zoom" src="food/uploads/<?= $food['img']; ?>" alt="">
+                      <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
                       <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
+                        <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
                       </ul>
-                    </div>
+                    </div>          
                   </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-02.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-03.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-04.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-01.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-02.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-03.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-sm-6">
-                    <div class="item">
-                      <img class="zoom" src="assets/images/food-04.jpg" alt="">
-                      <h4>อาหาร<br><span>อาหาร</span></h4>
-                      <ul>
-                        <li><i class="fa fa-star"></i> 79-.</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <?php   }
+                         }
+                        } ?>
                   <div class="col-lg-12">
                     <div class="main-button">
-                      <a href="food.html">Discover Popular</a>
+                      <a href="food.php">Discover Popular</a>
                     </div>
                   </div>
                 </div>

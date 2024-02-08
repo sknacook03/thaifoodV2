@@ -69,7 +69,7 @@
                     <!-- ***** Search End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                      <li><a href="index.html">หน้าแรก</a></li>
+                      <li><a href="index.php">หน้าแรก</a></li>
                       <li><a href="food.php">อาหาร</a></li>
                       <li><a href="drink.php">เครื่องดื่ม</a></li>
                       <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
