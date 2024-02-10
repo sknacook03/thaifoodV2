@@ -144,50 +144,78 @@
          <!-- ***** Most Popular Start ***** -->
         <!-- *****ประเภทต้ม***** -->
         <?php
-        
-        $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
-        $stmt->execute();
-        $foods = $stmt->fetchAll();
-        $groupedFoods = [];
-        foreach ($foods as $food) {
-            $typeID = $food['type'];
-            if (!isset($groupedFoods[$typeID])) {
-                $groupedFoods[$typeID] = [];
-            }
-            $groupedFoods[$typeID][] = $food;
-        }
-        
-        // แสดงทุกรายการในแต่ละกลุ่ม
-        foreach ($groupedFoods as $typeID => $typeFoods) {
-        ?>
-            <div class="most-popular" id="section<?= $typeID ?>">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="heading-section">
-                            <h4><em>ประเภท<?= $typeFoods[0]['typeName'] ?></em></h4>
-                        </div>
-                        <div class="row text-white">
-                            <?php foreach ($typeFoods as $food) { ?>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div class="item">
-                                        <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                                        <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                                        <ul>
-                                            <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="main-button">
-                                <a href="#top">กลับไปด้านบน</a>
-                            </div>
+          $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+          $stmt->execute();
+          $foods = $stmt->fetchAll();
+          $groupedFoods = [];
+          foreach ($foods as $food) {
+              $typeID = $food['type'];
+              if (!isset($groupedFoods[$typeID])) {
+                  $groupedFoods[$typeID] = [];
+              }
+              $groupedFoods[$typeID][] = $food;
+          }
+
+          // แสดงทุกรายการในแต่ละกลุ่ม
+          foreach ($groupedFoods as $typeID => $typeFoods) {
+          ?>
+          <div class="most-popular" id="section<?= $typeID ?>">
+          <div class="row">
+          <div class="col-lg-12">
+            <div class="heading-section">
+                <h4><em>ประเภท<?= $typeFoods[0]['typeName'] ?></em></h4>
+            </div>
+            <div class="row text-white">
+                <?php
+                $itemsPerPage = 4;
+                $totalItems = count($typeFoods);
+                $totalPages = ceil($totalItems / $itemsPerPage);
+                $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $offset = ($currentPage - 1) * $itemsPerPage;
+
+
+                $paginatedFoods = array_slice($typeFoods, $offset, $itemsPerPage);
+                foreach ($paginatedFoods as $food) {
+                ?>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="item">
+                            <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
+                            <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
+                            <ul>
+                                <li><i class="fa fa-star"></i> <?= $food['price']; ?> .-</li>
+                            </ul>
                         </div>
                     </div>
+                <?php } ?>
+            </div>
+            <div class="col-lg-12">
+                <div class="main-button">
+                    <a href="#top">กลับไปด้านบน</a>
                 </div>
             </div>
-        <?php } ?>
+            <div class="pagination">
+            <?php
+                  $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
+                  $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
+
+
+                  $startPage = max(1, $currentPage - 1);
+                  $endPage = min($totalPages, $currentPage + 1);
+
+                  echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
+
+                  for ($i = $startPage; $i <= $endPage; $i++) {
+                      $activeClass = ($currentPage == $i) ? 'active' : '';
+                      echo "<a class='$activeClass' href='?page=$i'>$i</a>";
+                  }
+
+                  echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
+                  ?>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <?php } ?>
         <!-- ***** Most Popular End ***** -->
 
       

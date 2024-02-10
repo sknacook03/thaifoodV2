@@ -136,10 +136,10 @@
                         <?php
                             if(isset($_SESSION['user_login']) && $review['userID'] == $_SESSION['user_login']){
                             ?>
-                            <a href="edit_comment.php?idReview=<?php echo $review['idReview']; ?>">
+                            <a href="edit_comment.php?idReview=<?php echo $review['idReview']; ?>" data-bs-toggle="tooltip" title="แก้ไขความคิดเห็น">
                             <img src="../assets/images/edit.png" class="edit-logo" >
                           </a>
-                            <a href="delete_comment.php?delete_comment=<?php echo $review['idReview']; ?>">
+                            <a href="delete_comment.php?delete_comment=<?php echo $review['idReview']; ?>" data-bs-toggle="tooltip" title="ลบความคิดเห็น">
                             <img src="../assets/images/delete.png" class="edit-logo">
                           </a>
                             <?php 
@@ -188,6 +188,12 @@
 
 
   <!-- Scripts -->
+  <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
   <!-- Bootstrap core JavaScript -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
