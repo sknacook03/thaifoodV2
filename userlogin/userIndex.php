@@ -107,7 +107,7 @@
                   <h6>Welcome To THAI FOOD</h6>
                   <h4><em>เว็บไซต์</em> รวมเมนูอาหารต่างๆภายในร้าน</h4>
                   <div class="main-button">
-                    <a href="userIndex.php">คลิกที่นี่</a>
+                    <a href="userfood.php">คลิกที่นี่</a>
                   </div>
                 </div>
               </div>

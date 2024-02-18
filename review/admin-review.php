@@ -107,7 +107,7 @@
                             <p><img src="../assets/images/profile-header.jpg" alt=""> <?php echo $review['firstname']?> <span> - <?php echo date('d M Y H:i น.', strtotime($review['date']));?></span></p>
                         </div>
                         <div class="comments">
-                            <p><?php echo $review['comment'];?></p>
+                        <p style="max-width: 1000px; word-wrap : break-word;"><?php echo $review['comment'];?></p>
                         </div>
                     </div>
                     <?php

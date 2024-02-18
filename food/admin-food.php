@@ -189,7 +189,7 @@ if (isset($_GET['delete'])) {
                   <td><?= $food['name']; ?></td>
                   <td><?= $food['type']; ?> <?= $food['typeName']; ?></td>
                   <td><?= $food['price']; ?></td>
-                  <td width="150px"><img width="100%" src="uploads/<?= $food['img']; ?>" class="rounded" alt=""></td>
+                  <td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/<?= $food['img']; ?>" class="rounded" alt=""></td>
                   <td>
                     <a href="edit.php?id=<?= $food['id']; ?>" class="btn btn-warning">Edit</a>
                     <a href="?delete=<?= $food['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบใช่หรือไม่?')">Delete</a>
@@ -210,10 +210,18 @@ if (isset($_GET['delete'])) {
 
         $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
         $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
-
-        $startPage = max(1, $currentPage - 1);
-        $endPage = min($totalPages, $currentPage + 1);
-
+        $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
+        $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
+        
+        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
+        if ($currentPage == 1) {
+            $endPage = min($totalPages, $startPage + 2); // ถ้าอยู่ที่หน้าแรก แสดง 4 หน้า
+        }
+        
+        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
+        if ($currentPage == $totalPages) {
+            $startPage = max(1, $endPage - 2); // ถ้าอยู่ที่หน้าสุดท้าย แสดง 4 หน้า
+        }
         echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
 
         for ($i = $startPage; $i <= $endPage; $i++) {

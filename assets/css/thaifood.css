@@ -1008,6 +1008,7 @@ Featured Games Style
 
 .featured-games {
   width: 1172px;
+  max-height: 500px;
   border-radius: 23px;
   background-color: #1f2122;
   padding: 30px;
@@ -1047,7 +1048,7 @@ Featured Games Style
 
 .featured-games .item img {
   border-radius: 23px;
-  height: 400px;
+  height: 300px;
   object-fit: cover;
 }
 

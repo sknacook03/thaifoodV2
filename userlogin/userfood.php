@@ -167,7 +167,7 @@
             </div>
             <div class="row text-white">
                 <?php
-                $itemsPerPage = 4;
+                $itemsPerPage = 2;
                 $totalItems = count($typeFoods);
                 $totalPages = ceil($totalItems / $itemsPerPage);
                 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;

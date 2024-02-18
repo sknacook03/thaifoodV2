@@ -130,7 +130,7 @@
                         </div>
                         <div class="iconn">
                         <div class="comments">
-                            <p><?php echo $review['comment'];?></p>
+                            <p style="max-width: 1000px; word-wrap : break-word;"><?php echo $review['comment'];?></p>
                         </div>
                         <div class="gapzone">
                         <?php

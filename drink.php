@@ -49,14 +49,14 @@ require_once("config.php");
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
               <img src="assets/images/logo.png" alt="">
             </a>
             <!-- ***** Logo End ***** -->
             <!-- ***** Search End ***** -->
             <div class="search-input">
-              <form id="search" action="#">
-                <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+              <form id="search" action="search.php" method="POST">
+              <input type="text" placeholder="Type Something" id='searchText' name="searchdrink" oninput="searchFood()" />
                 <i class="fa fa-search"></i>
               </form>
             </div>
