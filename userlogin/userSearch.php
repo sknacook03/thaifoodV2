@@ -105,11 +105,11 @@ if (!isset($_SESSION['user_login'])) {
                                 if (isset($_POST['searchfood'])) {
                                     $searchFood = $_POST['searchfood'];
                                     // Search for food in the database
-                                    $stmt = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ?");
-                                    $stmt->execute(["%$searchFood%"]);
+                                    $stmt = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $stmt->execute(["%$searchFood%","%$searchFood%"]);
                                     $foods = $stmt->fetchAll();
-                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ?");
-                                    $countStmt->execute(["%$searchFood%"]);
+                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $countStmt->execute(["%$searchFood%","%$searchFood%"]);
                                     $totalFoods = $countStmt->fetchColumn();
                                     echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalFoods . " รายการ</h6>";
                                     if (!$foods) {
@@ -139,14 +139,12 @@ if (!isset($_SESSION['user_login'])) {
                                     <?php
                                     }
                                 } elseif (isset($_POST['searchdrink'])) {
-                                    // Check if searching for drinks
                                     $searchDrink = $_POST['searchdrink'];
-                                    // Search for drinks in the database
-                                    $stmt = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ?");
-                                    $stmt->execute(["%$searchDrink%"]);
+                                    $stmt = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $stmt->execute(["%$searchDrink%","%$searchDrink%"]);
                                     $drinks = $stmt->fetchAll();
-                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ?");
-                                    $countStmt->execute(["%$searchDrink%"]);
+                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $countStmt->execute(["%$searchDrink%","%$searchDrink%"]);
                                     $totalDrinks = $countStmt->fetchColumn();
                                     echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalDrinks . " รายการ</h6>";
                                     if (!$drinks) {
@@ -177,30 +175,29 @@ if (!isset($_SESSION['user_login'])) {
                                     }
                                 } elseif (isset($_POST['search'])) {
                                     $searchTerm = $_POST['search'];
-                                    $stmtFood = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ?");
-                                    $stmtFood->execute(["%$searchTerm%"]);
+                                    $stmtFood = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $stmtFood->execute(["%$searchTerm%","%$searchTerm%"]);
                                     $foods = $stmtFood->fetchAll();
 
-                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ?");
-                                    $countStmt->execute(["%$searchTerm%"]);
+                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $countStmt->execute(["%$searchTerm%","%$searchTerm%"]);
                                     $totalFoods = $countStmt->fetchColumn();
 
-                                    $stmtDrink = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ?");
-                                    $stmtDrink->execute(["%$searchTerm%"]);
+                                    $stmtDrink = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $stmtDrink->execute(["%$searchTerm%","%$searchTerm%"]);
                                     $drinks = $stmtDrink->fetchAll();
 
-                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ?");
-                                    $countStmt->execute(["%$searchTerm%"]);
+                                    $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
+                                    $countStmt->execute(["%$searchTerm%","%$searchTerm%"]);
                                     $totalDrinks = $countStmt->fetchColumn();
-                                    
                                     if (!$foods && !$drinks) {
                                         echo "<h3>ไม่พบข้อมูล</h3>";
                                     } else {
                                         if ($foods) {
                                             echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalFoods . " รายการ</h6>";
                                             echo '<div class="heading-section">
-                                                <h4><em>อาหาร</em></h4>
-                                                </div>';
+                                            <h4><em>ประเภท' . $foods[0]['typeName'] . '</em></h4>
+                                            </div>';
                                         ?>
                                             <div class="row text-white">
                                                 <?php
@@ -224,8 +221,8 @@ if (!isset($_SESSION['user_login'])) {
                                         if ($drinks) {
                                             echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalDrinks . " รายการ</h6>";
                                             echo '<div class="heading-section">
-                                                <h4><em>เครื่องดื่ม</em></h4>
-                                                </div>';
+                                            <h4><em>ประเภท' . $drinks[0]['typeName'] . '</em></h4>
+                                            </div>';
                                         ?>
                                             <div class="row text-white">
                                                 <?php

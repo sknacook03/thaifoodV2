@@ -56,7 +56,7 @@ unset($_SESSION['input_values']);
             <!-- ***** Search End ***** -->
             <div class="search-input">
               <form id="search" action="search.php" method="POST">
-              <input type="text" placeholder="Type Something" id='searchText' name="searchfood" oninput="searchFood()" />
+                <input type="text" placeholder="Type Something" id='searchText' name="searchfood" oninput="searchFood()" />
                 <i class="fa fa-search"></i>
               </form>
             </div>

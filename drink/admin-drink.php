@@ -151,6 +151,22 @@ if (isset($_GET['delete'])) {
   <div class="container">
     <div class="row">
       <div class="page-content" id="searchResults">
+      <?php if (isset($_SESSION['success'])) { ?>
+        <div class="alert alert-success">
+          <?php
+          echo $_SESSION['success'];
+          unset($_SESSION['success']);
+          ?>
+        </div>
+      <?php } ?>
+      <?php if (isset($_SESSION['error'])) { ?>
+        <div class="alert alert-danger">
+          <?php
+          echo $_SESSION['error'];
+          unset($_SESSION['error']);
+          ?>
+        </div>
+      <?php } ?>
         <div class="col-md-12 d-flex mb-3">
           <h2>Drink</h2>
           <div class="col-md-11 d-flex justify-content-end">
@@ -207,113 +223,98 @@ if (isset($_GET['delete'])) {
           </tbody>
         </table>
         <div class="pagination">
-        <?php
-        $stmt = $conn->query("SELECT COUNT(*) AS total FROM Drink");
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $totalItems = $row['total'];
-        $totalPages = ceil($totalItems / $itemsPerPage);
+          <?php
+          $stmt = $conn->query("SELECT COUNT(*) AS total FROM Drink");
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+          $totalItems = $row['total'];
+          $totalPages = ceil($totalItems / $itemsPerPage);
 
-        $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
-        $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
+          $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
+          $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
 
-        $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
-        $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
-        
-        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
-        if ($currentPage == 1) {
+          $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
+          $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
+
+          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
+          if ($currentPage == 1) {
             $endPage = min($totalPages, $startPage + 2); // ถ้าอยู่ที่หน้าแรก แสดง 4 หน้า
-        }
-        
-        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
-        if ($currentPage == $totalPages) {
+          }
+
+          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
+          if ($currentPage == $totalPages) {
             $startPage = max(1, $endPage - 2); // ถ้าอยู่ที่หน้าสุดท้าย แสดง 4 หน้า
-        }
-        echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
+          }
+          echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
 
-        for ($i = $startPage; $i <= $endPage; $i++) {
-          $activeClass = ($currentPage == $i) ? 'active' : '';
-          echo "<a class='$activeClass' href='?page=$i'>$i</a>";
-        }
+          for ($i = $startPage; $i <= $endPage; $i++) {
+            $activeClass = ($currentPage == $i) ? 'active' : '';
+            echo "<a class='$activeClass' href='?page=$i'>$i</a>";
+          }
 
-        echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
-        ?>
-      </div>
+          echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
+          ?>
+        </div>
       </div>
       <hr>
-    
-      <?php if (isset($_SESSION['success'])) { ?>
-        <div class="alert alert-success">
-          <?php
-          echo $_SESSION['success'];
-          unset($_SESSION['success']);
-          ?>
-        </div>
-      <?php } ?>
-      <?php if (isset($_SESSION['error'])) { ?>
-        <div class="alert alert-danger">
-          <?php
-          echo $_SESSION['error'];
-          unset($_SESSION['error']);
-          ?>
-        </div>
-      <?php } ?>
     </div>
 
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
 
 
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
 
-  <!-- Scripts -->
-  <script>
-document.getElementById("priceInput").addEventListener("input", function(event) {
-  let inputValue = event.target.value;
-  if (!/^\d*\.?\d*$/.test(inputValue)) {
-    event.target.value = inputValue.replace(/[^\d.]/g, '');
-  }
-});
-</script>
-  <script>
-    $(document).ready(function(){
-        $('#searchText').on('input', function(){
-            var searchText = $(this).val();
+    <!-- Scripts -->
+    <script>
+      document.getElementById("priceInput").addEventListener("input", function(event) {
+        let inputValue = event.target.value;
+        if (!/^\d*\.?\d*$/.test(inputValue)) {
+          event.target.value = inputValue.replace(/[^\d.]/g, '');
+        }
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        $('#searchText').on('input', function() {
+          var searchText = $(this).val();
 
-            $.ajax({
-                url: 'search.php',
-                type: 'POST',
-                dataType: 'json',
-                data: { searchKeyword: searchText },
-                success: function(response){
-                    // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
-                    displayResults(response);
-                }
-            });
+          $.ajax({
+            url: 'search.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              searchKeyword: searchText
+            },
+            success: function(response) {
+              // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
+              displayResults(response);
+            }
+          });
         });
-    });
+      });
 
-    // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
-    function displayResults(results) {
-    var searchResultsContainer = $('#searchResults');
-    searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
+      // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
+      function displayResults(results) {
+        var searchResultsContainer = $('#searchResults');
+        searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
 
-    if (results.length === 0) {
-        searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
-    } else {
-        var tableHead = 
-        '<div class="col-md-12 d-flex mb-3">'+
-          '<h2>Drink</h2>'+
-          '<div class="col-md-11 d-flex justify-content-end">'+
-            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>'+
-          '</div>'+
-        '</div>'+
+        if (results.length === 0) {
+          searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
+        } else {
+          var tableHead =
+            '<div class="col-md-12 d-flex mb-3">' +
+            '<h2>Drink</h2>' +
+            '<div class="col-md-11 d-flex justify-content-end">' +
+            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>' +
+            '</div>' +
+            '</div>' +
             '<table class="table table-dark table-striped">' +
             '<thead>' +
             '<tr>' +
@@ -327,51 +328,48 @@ document.getElementById("priceInput").addEventListener("input", function(event) 
             '</thead>' +
             '<tbody>';
 
-        var tableBody = '';
-        results.forEach(function(Drink) {
+          var tableBody = '';
+          results.forEach(function(Drink) {
             tableBody += '<tr>' +
-                '<th scope="row">' + Drink['id'] + '</th>' +
-                '<td>' + Drink['name'] + '</td>' +
-                '<td>' + Drink['type'] + ' ' + Drink['typeName'] + '</td>' +
-                '<td>' + Drink['price'] + '</td>' +
-                '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + Drink['img'] + '" class="rounded" alt=""></td>' +
-                '<td>' +
-                '<a href="edit.php?id=' + Drink['id'] + '" class="btn btn-warning">Edit</a>' +
-                '<a href="?delete=' + Drink['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
-                '</td>' +
-                '</tr>';
-        });
+              '<th scope="row">' + Drink['id'] + '</th>' +
+              '<td>' + Drink['name'] + '</td>' +
+              '<td>' + Drink['type'] + ' ' + Drink['typeName'] + '</td>' +
+              '<td>' + Drink['price'] + '</td>' +
+              '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + Drink['img'] + '" class="rounded" alt=""></td>' +
+              '<td>' +
+              '<a href="edit.php?id=' + Drink['id'] + '" class="btn btn-warning">Edit</a>' +
+              '<a href="?delete=' + Drink['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
+              '</td>' +
+              '</tr>';
+          });
 
-        var tableEnd = '</tbody>' +
+          var tableEnd = '</tbody>' +
             '</table>';
 
-        searchResultsContainer.append(tableHead + tableBody + tableEnd);
-    }
-      
-  }
+          searchResultsContainer.append(tableHead + tableBody + tableEnd);
+        }
 
-
-
-</script>
-  <!-- Bootstrap core JavaScript -->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-
-  <script src="../assets/js/isotope.min.js"></script>
-  <script src="../assets/js/owl-carousel.js"></script>
-  <script src="../assets/js/tabs.js"></script>
-  <script src="../assets/js/popup.js"></script>
-  <script src="../assets/js/custom.js"></script>
-  <script>
-    let imgInput = document.getElementById('imgInput');
-    let previewImg = document.getElementById('previewImg');
-    imgInput.onchange = evt => {
-      const [file] = imgInput.files;
-      if (file) {
-        previewImg.src = URL.createObjectURL(file);
       }
-    }
-  </script>
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../assets/js/isotope.min.js"></script>
+    <script src="../assets/js/owl-carousel.js"></script>
+    <script src="../assets/js/tabs.js"></script>
+    <script src="../assets/js/popup.js"></script>
+    <script src="../assets/js/custom.js"></script>
+    <script>
+      let imgInput = document.getElementById('imgInput');
+      let previewImg = document.getElementById('previewImg');
+      imgInput.onchange = evt => {
+        const [file] = imgInput.files;
+        if (file) {
+          previewImg.src = URL.createObjectURL(file);
+        }
+      }
+    </script>
 
 </body>
 

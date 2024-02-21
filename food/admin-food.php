@@ -129,12 +129,12 @@ if (isset($_GET['delete'])) {
                 } ?>
               </select>
             </div>
-           <div class="mb-3">
+            <div class="mb-3">
               <label for="Name" class="col-form-label">ราคา:</label>
               <input type="number" required class="form-control" name="price">
               <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
 
-            </div> 
+            </div>
             <div class="mb-3">
               <label for="img" class="col-form-label">รูปภาพ:</label>
               <input type="file" required class="form-control" id="imgInput" name="img">
@@ -152,6 +152,22 @@ if (isset($_GET['delete'])) {
   <div class="container">
     <div class="row">
       <div class="page-content" id="searchResults">
+        <?php if (isset($_SESSION['success'])) { ?>
+          <div class="alert alert-success">
+            <?php
+            echo $_SESSION['success'];
+            unset($_SESSION['success']);
+            ?>
+          </div>
+        <?php } ?>
+        <?php if (isset($_SESSION['error'])) { ?>
+          <div class="alert alert-danger">
+            <?php
+            echo $_SESSION['error'];
+            unset($_SESSION['error']);
+            ?>
+          </div>
+        <?php } ?>
         <div class="col-md-12 d-flex mb-3">
           <h2>Food</h2>
           <div class="col-md-11 d-flex justify-content-end">
@@ -219,14 +235,12 @@ if (isset($_GET['delete'])) {
           $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
           $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
 
-          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
           if ($currentPage == 1) {
-            $endPage = min($totalPages, $startPage + 2); // ถ้าอยู่ที่หน้าแรก แสดง 4 หน้า
+            $endPage = min($totalPages, $startPage + 2);
           }
 
-          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
           if ($currentPage == $totalPages) {
-            $startPage = max(1, $endPage - 2); // ถ้าอยู่ที่หน้าสุดท้าย แสดง 4 หน้า
+            $startPage = max(1, $endPage - 2);
           }
           echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
 
@@ -240,23 +254,6 @@ if (isset($_GET['delete'])) {
         </div>
       </div>
       <hr>
-
-      <?php if (isset($_SESSION['success'])) { ?>
-        <div class="alert alert-success">
-          <?php
-          echo $_SESSION['success'];
-          unset($_SESSION['success']);
-          ?>
-        </div>
-      <?php } ?>
-      <?php if (isset($_SESSION['error'])) { ?>
-        <div class="alert alert-danger">
-          <?php
-          echo $_SESSION['error'];
-          unset($_SESSION['error']);
-          ?>
-        </div>
-      <?php } ?>
     </div>
 
     <footer>
@@ -274,46 +271,48 @@ if (isset($_GET['delete'])) {
 
     <!-- Scripts -->
     <script>
-document.getElementById("priceInput").addEventListener("input", function(event) {
-  let inputValue = event.target.value;
-  if (!/^\d*\.?\d*$/.test(inputValue)) {
-    event.target.value = inputValue.replace(/[^\d.]/g, '');
-  }
-});
-</script>
+      document.getElementById("priceInput").addEventListener("input", function(event) {
+        let inputValue = event.target.value;
+        if (!/^\d*\.?\d*$/.test(inputValue)) {
+          event.target.value = inputValue.replace(/[^\d.]/g, '');
+        }
+      });
+    </script>
     <script>
-    $(document).ready(function(){
-        $('#searchText').on('input', function(){
-            var searchText = $(this).val();
+      $(document).ready(function() {
+        $('#searchText').on('input', function() {
+          var searchText = $(this).val();
 
-            $.ajax({
-                url: 'search.php',
-                type: 'POST',
-                dataType: 'json',
-                data: { searchKeyword: searchText },
-                success: function(response){
-                    // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
-                    displayResults(response);
-                }
-            });
+          $.ajax({
+            url: 'search.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              searchKeyword: searchText
+            },
+            success: function(response) {
+              // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
+              displayResults(response);
+            }
+          });
         });
-    });
+      });
 
-    // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
-    function displayResults(results) {
-    var searchResultsContainer = $('#searchResults');
-    searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
+      // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
+      function displayResults(results) {
+        var searchResultsContainer = $('#searchResults');
+        searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
 
-    if (results.length === 0) {
-        searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
-    } else {
-        var tableHead = 
-        '<div class="col-md-12 d-flex mb-3">'+
-          '<h2>Food</h2>'+
-          '<div class="col-md-11 d-flex justify-content-end">'+
-            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>'+
-          '</div>'+
-        '</div>'+
+        if (results.length === 0) {
+          searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
+        } else {
+          var tableHead =
+            '<div class="col-md-12 d-flex mb-3">' +
+            '<h2>Food</h2>' +
+            '<div class="col-md-11 d-flex justify-content-end">' +
+            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>' +
+            '</div>' +
+            '</div>' +
             '<table class="table table-dark table-striped">' +
             '<thead>' +
             '<tr>' +
@@ -327,32 +326,29 @@ document.getElementById("priceInput").addEventListener("input", function(event) 
             '</thead>' +
             '<tbody>';
 
-        var tableBody = '';
-        results.forEach(function(food) {
+          var tableBody = '';
+          results.forEach(function(food) {
             tableBody += '<tr>' +
-                '<th scope="row">' + food['id'] + '</th>' +
-                '<td>' + food['name'] + '</td>' +
-                '<td>' + food['type'] + ' ' + food['typeName'] + '</td>' +
-                '<td>' + food['price'] + '</td>' +
-                '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + food['img'] + '" class="rounded" alt=""></td>' +
-                '<td>' +
-                '<a href="edit.php?id=' + food['id'] + '" class="btn btn-warning">Edit</a>' +
-                '<a href="?delete=' + food['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
-                '</td>' +
-                '</tr>';
-        });
+              '<th scope="row">' + food['id'] + '</th>' +
+              '<td>' + food['name'] + '</td>' +
+              '<td>' + food['type'] + ' ' + food['typeName'] + '</td>' +
+              '<td>' + food['price'] + '</td>' +
+              '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + food['img'] + '" class="rounded" alt=""></td>' +
+              '<td>' +
+              '<a href="edit.php?id=' + food['id'] + '" class="btn btn-warning">Edit</a>' +
+              '<a href="?delete=' + food['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
+              '</td>' +
+              '</tr>';
+          });
 
-        var tableEnd = '</tbody>' +
+          var tableEnd = '</tbody>' +
             '</table>';
 
-        searchResultsContainer.append(tableHead + tableBody + tableEnd);
-    }
-      
-  }
+          searchResultsContainer.append(tableHead + tableBody + tableEnd);
+        }
 
-
-
-</script>
+      }
+    </script>
     <!-- Bootstrap core JavaScript -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>

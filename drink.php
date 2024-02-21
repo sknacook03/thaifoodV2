@@ -56,7 +56,7 @@ require_once("config.php");
             <!-- ***** Search End ***** -->
             <div class="search-input">
               <form id="search" action="search.php" method="POST">
-              <input type="text" placeholder="Type Something" id='searchText' name="searchdrink" oninput="searchFood()" />
+                <input type="text" placeholder="Type Something" id='searchText' name="searchdrink" oninput="searchFood()" />
                 <i class="fa fa-search"></i>
               </form>
             </div>
