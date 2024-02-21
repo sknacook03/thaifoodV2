@@ -115,10 +115,13 @@
             <?php }?>
 
         <?php
-            $stmt = $conn->query("SELECT review.*, users.firstname, users.userID FROM review JOIN users ON review.userID = users.userID ORDER BY idReview");
+            $stmt = $conn->query("SELECT review.*, users.firstname, users.userID FROM review JOIN users ON review.userID = users.userID ORDER BY idReview DESC");
             $stmt->execute();
             $reviews = $stmt->fetchAll();
-
+            $countStmt = $conn->prepare("SELECT COUNT(idReview) AS total FROM review JOIN users ON review.userID = users.userID ORDER BY idReview");
+            $countStmt->execute();
+            $totalReviews = $countStmt->fetchColumn();
+            echo "<h6 class=\"mb-4\">" . $totalReviews . " รายการ</h6>";
             if (!$reviews) {
                 echo "<tr><td colspan='6' class='text-center'>No comment found</td></tr>";
             } else {

@@ -180,7 +180,8 @@
                     </div>
                     <div class="mb-3 text-white">
                       <label for="Name" class="col-form-label">ราคา:</label>
-                      <input type="text" value="<?= $data['price'];?>" required class="form-control" name="price">
+                      <input type="number" value="<?= $data['price'];?>" required class="form-control" name="price">
+                      <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
                     </div>
                     <div class="mb-3 text-white ">
                       <label for="img" class="col-form-label">รูปภาพ:</label>
@@ -211,6 +212,14 @@
 
 
   <!-- Scripts -->
+  <script>
+document.getElementById("priceInput").addEventListener("input", function(event) {
+  let inputValue = event.target.value;
+  if (!/^\d*\.?\d*$/.test(inputValue)) {
+    event.target.value = inputValue.replace(/[^\d.]/g, '');
+  }
+});
+</script>
   <!-- Bootstrap core JavaScript -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>

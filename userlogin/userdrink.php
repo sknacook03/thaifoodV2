@@ -1,44 +1,44 @@
 <?php
-    session_start();
-    require_once("../config.php");
-    if(!isset($_SESSION['user_login'])){
-      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
-      header('location:../login.php');
-  }
+session_start();
+require_once("../config.php");
+if (!isset($_SESSION['user_login'])) {
+  $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+  header('location:../login.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../assets/images/title-logo.jpg.png" />
-    <title>ThaiFood</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../assets/images/title-logo.jpg.png" />
+  <title>ThaiFood</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/thaifood.css">
-    <link rel="stylesheet" href="../assets/css/owl.css">
-    <link rel="stylesheet" href="../assets/css/animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-  </head>
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="../assets/css/fontawesome.css">
+  <link rel="stylesheet" href="../assets/css/thaifood.css">
+  <link rel="stylesheet" href="../assets/css/owl.css">
+  <link rel="stylesheet" href="../assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+</head>
 
 <body>
-<?php
-        if(isset($_SESSION['user_login'])){
-            $user_id = $_SESSION['user_login'];
-            $stmt = $conn->query("SELECT * FROM users WHERE userID = $user_id");
-            $stmt->execute();
-            $row =  $stmt->fetch(PDO::FETCH_ASSOC);
-        }
-    ?>
+  <?php
+  if (isset($_SESSION['user_login'])) {
+    $user_id = $_SESSION['user_login'];
+    $stmt = $conn->query("SELECT * FROM users WHERE userID = $user_id");
+    $stmt->execute();
+    $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+  ?>
   <!-- ***** Preloader Start ***** -->
   <div id="js-preloader" class="js-preloader">
     <div class="preloader-inner">
@@ -55,40 +55,40 @@
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="userIndex.php" class="logo">
-                        <img src="../assets/images/logo.png" alt="">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Search End ***** -->
-                    <div class="search-input">
-                      <form id="search" action="#">
-                        <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
-                        <i class="fa fa-search"></i>
-                      </form>
-                    </div>
-                    <!-- ***** Search End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li><a href="userindex.php">หน้าแรก</a></li>
-                        <li><a href="userfood.php">อาหาร</a></li>
-                        <li><a href="userdrink.php" class="active">เครื่องดื่ม</a></li>
-                        <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
-                        <li><a href="userreview.php">รีวิวลูกค้า</a></li>
-                        <!-- <li><a href="info.html">ติดต่อเรา</a></li> -->
-                        <li><a><?php echo $row['firstname']?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
-                    </ul>   
-                    <a href="../logout.php" class="btn btn-danger mb-5 mt-1">logout</a>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="userIndex.php" class="logo">
+              <img src="../assets/images/logo.png" alt="">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Search End ***** -->
+            <div class="search-input">
+              <form id="search" action="userSearch.php" method="POST">
+                <input type="text" placeholder="Type Something" id='searchText' name="searchdrink" oninput="searchFood()" />
+                <i class="fa fa-search"></i>
+              </form>
             </div>
+            <!-- ***** Search End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a href="userindex.php">หน้าแรก</a></li>
+              <li><a href="userfood.php">อาหาร</a></li>
+              <li><a href="userdrink.php" class="active">เครื่องดื่ม</a></li>
+              <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
+              <li><a href="userreview.php">รีวิวลูกค้า</a></li>
+              <!-- <li><a href="info.html">ติดต่อเรา</a></li> -->
+              <li><a><?php echo $row['firstname'] ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
+            </ul>
+            <a href="../logout.php" class="btn btn-danger mb-5 mt-1">logout</a>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
         </div>
+      </div>
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
@@ -106,38 +106,38 @@
                   <h4><em>แนะนำ</em> อาหาร</h4>
                 </div>
                 <div class="owl-features owl-carousel">
-                <?php
-        
-                      $stmt = $conn->query("SELECT * FROM drink JOIN type ON drink.type = type.typeID");
-                      $stmt->execute();
-                      $drinks = $stmt->fetchAll();
-                            if(!$drinks){
-                              echo "<tr><td colspan='6' class='text-center' style='color: white;'>No drink found</td></tr>";
-                            }else{
-                              foreach ($drinks as $drink){  
-                        ?>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="../drink/uploads/<?= $drink['img']; ?>" alt="">
-                      <div class="hover-effect">
-                        <h6>แนะนำ</h6>
-                      </div>
-                    </div>
-                    <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
-                    <ul>
-                      <li><i class="fa fa-star"></i> <?= $drink['price']; ?> .-</li>
+                  <?php
 
-                    </ul>
-                  </div>
+                  $stmt = $conn->query("SELECT * FROM drink JOIN type ON drink.type = type.typeID");
+                  $stmt->execute();
+                  $drinks = $stmt->fetchAll();
+                  if (!$drinks) {
+                    echo "<tr><td colspan='6' class='text-center' style='color: white;'>No drink found</td></tr>";
+                  } else {
+                    foreach ($drinks as $drink) {
+                  ?>
+                      <div class="item">
+                        <div class="thumb">
+                          <img src="../drink/uploads/<?= $drink['img']; ?>" alt="">
+                          <div class="hover-effect">
+                            <h6>แนะนำ</h6>
+                          </div>
+                        </div>
+                        <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
+                        <ul>
+                          <li><i class="fa fa-star"></i> <?= $drink['price']; ?> .-</li>
+
+                        </ul>
+                      </div>
                   <?php  }
-                        } ?>
+                  } ?>
                 </div>
               </div>
             </div>
           </div>
           <!-- ***** Featured Games End ***** -->
-         <!-- ***** Most Popular Start ***** -->
-         <div class="most-popular">
+          <!-- ***** Most Popular Start ***** -->
+          <div class="most-popular">
             <div class="row">
               <div class="col-lg-12">
                 <div class="heading-section">
@@ -205,38 +205,38 @@
               </div>
             </div>
           </div>
-        <!-- ***** Most Popular End ***** -->
+          <!-- ***** Most Popular End ***** -->
 
-      
-      </div>
-    </div>
-  </div>
-  
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">THAI FOOD</a> Company. All rights reserved. 
-          
-          
+
         </div>
       </div>
     </div>
-  </footer>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <p>Copyright © 2036 <a href="#">THAI FOOD</a> Company. All rights reserved.
 
 
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="../assets/js/rolling-back.js"></script>
-  <script src="../assets/js/isotope.min.js"></script>
-  <script src="../assets/js/owl-carousel.js"></script>
-  <script src="../assets/js/tabs.js"></script>
-  <script src="../assets/js/popup.js"></script>
-  <script src="../assets/js/custom.js"></script>
+          </div>
+        </div>
+      </div>
+    </footer>
 
 
-  </body>../
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/js/rolling-back.js"></script>
+    <script src="../assets/js/isotope.min.js"></script>
+    <script src="../assets/js/owl-carousel.js"></script>
+    <script src="../assets/js/tabs.js"></script>
+    <script src="../assets/js/popup.js"></script>
+    <script src="../assets/js/custom.js"></script>
+
+
+</body>../
 
 </html>

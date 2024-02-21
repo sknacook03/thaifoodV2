@@ -28,6 +28,7 @@ if (isset($_GET['delete'])) {
 
   <!-- Bootstrap core CSS -->
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
   <!-- Additional CSS Files -->
@@ -130,7 +131,8 @@ if (isset($_GET['delete'])) {
             </div>
             <div class="mb-3">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="text" required class="form-control" name="price">
+              <input type="number" required class="form-control" name="price">
+              <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
             </div>
             <div class="mb-3">
               <label for="img" class="col-form-label">รูปภาพ:</label>
@@ -148,7 +150,7 @@ if (isset($_GET['delete'])) {
   </div>
   <div class="container">
     <div class="row">
-      <div class="page-content">
+      <div class="page-content" id="searchResults">
         <div class="col-md-12 d-flex mb-3">
           <h2>Drink</h2>
           <div class="col-md-11 d-flex justify-content-end">
@@ -160,8 +162,8 @@ if (isset($_GET['delete'])) {
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">ชื่ออาหาร</th>
-              <th scope="col">ประเภทอาหาร</th>
+              <th scope="col">ชื่อเครื่องดื่ม</th>
+              <th scope="col">ประเภทเครื่องดื่ม</th>
               <th scope="col">ราคา</th>
               <th scope="col">รูปภาพ</th>
               <th scope="col">ตัวเลือก</th>
@@ -178,7 +180,10 @@ if (isset($_GET['delete'])) {
             $stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
             $stmt->execute();
             $Drinks = $stmt->fetchAll();
-
+            $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID");
+            $countStmt->execute();
+            $totalDrinks = $countStmt->fetchColumn();
+            echo "<h6 class=\"mb-4\" style=\"color: #666;\">มีจำนวนรายการเครื่องดื่มทั้งหมด " . $totalDrinks . " รายการ</h6>";
             if (empty($Drinks)) {
               echo "<tr><td colspan='6' class='text-center'>No Drink found</td></tr>";
             } else {
@@ -268,6 +273,86 @@ if (isset($_GET['delete'])) {
 
 
   <!-- Scripts -->
+  <script>
+document.getElementById("priceInput").addEventListener("input", function(event) {
+  let inputValue = event.target.value;
+  if (!/^\d*\.?\d*$/.test(inputValue)) {
+    event.target.value = inputValue.replace(/[^\d.]/g, '');
+  }
+});
+</script>
+  <script>
+    $(document).ready(function(){
+        $('#searchText').on('input', function(){
+            var searchText = $(this).val();
+
+            $.ajax({
+                url: 'search.php',
+                type: 'POST',
+                dataType: 'json',
+                data: { searchKeyword: searchText },
+                success: function(response){
+                    // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
+                    displayResults(response);
+                }
+            });
+        });
+    });
+
+    // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
+    function displayResults(results) {
+    var searchResultsContainer = $('#searchResults');
+    searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
+
+    if (results.length === 0) {
+        searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
+    } else {
+        var tableHead = 
+        '<div class="col-md-12 d-flex mb-3">'+
+          '<h2>Drink</h2>'+
+          '<div class="col-md-11 d-flex justify-content-end">'+
+            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>'+
+          '</div>'+
+        '</div>'+
+            '<table class="table table-dark table-striped">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">ID</th>' +
+            '<th scope="col">ชื่อเครื่องดื่ม</th>' +
+            '<th scope="col">ประเภทเครื่องดื่ม</th>' +
+            '<th scope="col">ราคา</th>' +
+            '<th scope="col">รูปภาพ</th>' +
+            '<th scope="col">ตัวเลือก</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = '';
+        results.forEach(function(Drink) {
+            tableBody += '<tr>' +
+                '<th scope="row">' + Drink['id'] + '</th>' +
+                '<td>' + Drink['name'] + '</td>' +
+                '<td>' + Drink['type'] + ' ' + Drink['typeName'] + '</td>' +
+                '<td>' + Drink['price'] + '</td>' +
+                '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + Drink['img'] + '" class="rounded" alt=""></td>' +
+                '<td>' +
+                '<a href="edit.php?id=' + Drink['id'] + '" class="btn btn-warning">Edit</a>' +
+                '<a href="?delete=' + Drink['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
+                '</td>' +
+                '</tr>';
+        });
+
+        var tableEnd = '</tbody>' +
+            '</table>';
+
+        searchResultsContainer.append(tableHead + tableBody + tableEnd);
+    }
+      
+  }
+
+
+
+</script>
   <!-- Bootstrap core JavaScript -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>

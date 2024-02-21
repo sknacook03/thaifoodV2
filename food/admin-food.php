@@ -28,6 +28,7 @@ if (isset($_GET['delete'])) {
 
   <!-- Bootstrap core CSS -->
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
   <!-- Additional CSS Files -->
@@ -67,7 +68,7 @@ if (isset($_GET['delete'])) {
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="admin-index.php" class="logo">
+            <a href="../admin-index.php" class="logo">
               <img src="../assets/images/logo.png" alt="">
             </a>
             <!-- ***** Logo End ***** -->
@@ -128,10 +129,12 @@ if (isset($_GET['delete'])) {
                 } ?>
               </select>
             </div>
-            <div class="mb-3">
+           <div class="mb-3">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="text" required class="form-control" name="price">
-            </div>
+              <input type="number" required class="form-control" name="price">
+              <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
+
+            </div> 
             <div class="mb-3">
               <label for="img" class="col-form-label">รูปภาพ:</label>
               <input type="file" required class="form-control" id="imgInput" name="img">
@@ -148,7 +151,7 @@ if (isset($_GET['delete'])) {
   </div>
   <div class="container">
     <div class="row">
-      <div class="page-content">
+      <div class="page-content" id="searchResults">
         <div class="col-md-12 d-flex mb-3">
           <h2>Food</h2>
           <div class="col-md-11 d-flex justify-content-end">
@@ -178,7 +181,10 @@ if (isset($_GET['delete'])) {
             $stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
             $stmt->execute();
             $foods = $stmt->fetchAll();
-
+            $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID");
+            $countStmt->execute();
+            $totalFoods = $countStmt->fetchColumn();
+            echo "<h6 class=\"mb-4\" style=\"color: #666;\">มีจำนวนรายการอาหารทั้งหมด " . $totalFoods . " รายการ</h6>";
             if (empty($foods)) {
               echo "<tr><td colspan='6' class='text-center'>No food found</td></tr>";
             } else {
@@ -202,39 +208,39 @@ if (isset($_GET['delete'])) {
           </tbody>
         </table>
         <div class="pagination">
-        <?php
-        $stmt = $conn->query("SELECT COUNT(*) AS total FROM food");
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $totalItems = $row['total'];
-        $totalPages = ceil($totalItems / $itemsPerPage);
+          <?php
+          $stmt = $conn->query("SELECT COUNT(*) AS total FROM food");
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+          $totalItems = $row['total'];
+          $totalPages = ceil($totalItems / $itemsPerPage);
 
-        $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
-        $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
-        $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
-        $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
-        
-        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
-        if ($currentPage == 1) {
+          $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
+          $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
+          $startPage = max(1, $currentPage - 1); // เริ่มต้นที่หน้าปัจจุบัน - 2
+          $endPage = min($totalPages, $currentPage + 1); // สิ้นสุดที่หน้าปัจจุบัน + 2
+
+          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าแรก
+          if ($currentPage == 1) {
             $endPage = min($totalPages, $startPage + 2); // ถ้าอยู่ที่หน้าแรก แสดง 4 หน้า
-        }
-        
-        // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
-        if ($currentPage == $totalPages) {
+          }
+
+          // แสดงเพียง 3 หน้า ถ้าหน้าปัจจุบันอยู่ที่หน้าสุดท้าย
+          if ($currentPage == $totalPages) {
             $startPage = max(1, $endPage - 2); // ถ้าอยู่ที่หน้าสุดท้าย แสดง 4 หน้า
-        }
-        echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
+          }
+          echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
 
-        for ($i = $startPage; $i <= $endPage; $i++) {
-          $activeClass = ($currentPage == $i) ? 'active' : '';
-          echo "<a class='$activeClass' href='?page=$i'>$i</a>";
-        }
+          for ($i = $startPage; $i <= $endPage; $i++) {
+            $activeClass = ($currentPage == $i) ? 'active' : '';
+            echo "<a class='$activeClass' href='?page=$i'>$i</a>";
+          }
 
-        echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
-        ?>
-      </div>
+          echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
+          ?>
+        </div>
       </div>
       <hr>
-    
+
       <?php if (isset($_SESSION['success'])) { ?>
         <div class="alert alert-success">
           <?php
@@ -267,6 +273,86 @@ if (isset($_GET['delete'])) {
 
 
     <!-- Scripts -->
+    <script>
+document.getElementById("priceInput").addEventListener("input", function(event) {
+  let inputValue = event.target.value;
+  if (!/^\d*\.?\d*$/.test(inputValue)) {
+    event.target.value = inputValue.replace(/[^\d.]/g, '');
+  }
+});
+</script>
+    <script>
+    $(document).ready(function(){
+        $('#searchText').on('input', function(){
+            var searchText = $(this).val();
+
+            $.ajax({
+                url: 'search.php',
+                type: 'POST',
+                dataType: 'json',
+                data: { searchKeyword: searchText },
+                success: function(response){
+                    // เรียกใช้ฟังก์ชั่นสำหรับแสดงผลลัพธ์
+                    displayResults(response);
+                }
+            });
+        });
+    });
+
+    // ฟังก์ชั่นสำหรับแสดงผลลัพธ์ค้นหา
+    function displayResults(results) {
+    var searchResultsContainer = $('#searchResults');
+    searchResultsContainer.empty(); // เคลียร์ข้อมูลเดิมทุกครั้งที่มีการค้นหาใหม่
+
+    if (results.length === 0) {
+        searchResultsContainer.append('<h4>ไม่พบข้อมูล</h4>');
+    } else {
+        var tableHead = 
+        '<div class="col-md-12 d-flex mb-3">'+
+          '<h2>Food</h2>'+
+          '<div class="col-md-11 d-flex justify-content-end">'+
+            '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add</button>'+
+          '</div>'+
+        '</div>'+
+            '<table class="table table-dark table-striped">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">ID</th>' +
+            '<th scope="col">ชื่ออาหาร</th>' +
+            '<th scope="col">ประเภทอาหาร</th>' +
+            '<th scope="col">ราคา</th>' +
+            '<th scope="col">รูปภาพ</th>' +
+            '<th scope="col">ตัวเลือก</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = '';
+        results.forEach(function(food) {
+            tableBody += '<tr>' +
+                '<th scope="row">' + food['id'] + '</th>' +
+                '<td>' + food['name'] + '</td>' +
+                '<td>' + food['type'] + ' ' + food['typeName'] + '</td>' +
+                '<td>' + food['price'] + '</td>' +
+                '<td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/' + food['img'] + '" class="rounded" alt=""></td>' +
+                '<td>' +
+                '<a href="edit.php?id=' + food['id'] + '" class="btn btn-warning">Edit</a>' +
+                '<a href="?delete=' + food['id'] + '" class="btn btn-danger" onclick="return confirm(\'คุณต้องการลบใช่หรือไม่?\')">Delete</a>' +
+                '</td>' +
+                '</tr>';
+        });
+
+        var tableEnd = '</tbody>' +
+            '</table>';
+
+        searchResultsContainer.append(tableHead + tableBody + tableEnd);
+    }
+      
+  }
+
+
+
+</script>
     <!-- Bootstrap core JavaScript -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
