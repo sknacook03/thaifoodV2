@@ -1,6 +1,11 @@
 <?php
-session_start();
-require_once("../config.php");
+    session_start();
+    require_once("../config.php");
+    if(!isset($_SESSION['admin_login'])){
+      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+      header('location:../login.php');
+      exit;
+  }
 
 if (isset($_POST['update'])) {
   $id = $_POST['id'];
@@ -27,6 +32,20 @@ if (isset($_POST['update'])) {
   } else {
     $fileNew = $img2;
   }
+  $check = $conn->prepare("SELECT name FROM drink WHERE name = :name AND id != :id");
+  $check->bindParam(':name', $name, PDO::PARAM_STR);
+  $check->bindParam(':id', $id, PDO::PARAM_INT);
+  $check->execute();
+  $count = $check->rowCount();
+  if ($count > 0) {
+    $_SESSION['error'] = "ชื่อเครื่องดื่มนี้มีอยู่แล้วในระบบ";
+    header("location: admin-drink.php");
+    exit;
+  }else if (strpos($name, ' ') !== false){
+    $_SESSION['error'] = 'กรุณากรอกชื่อโดยไม่มีช่องว่าง';
+    header("location: admin-drink.php");
+    exit; 
+}
   $sql = $conn->prepare("UPDATE drink SET name = :name, type = :type, price = :price, img = :img WHERE id = :id");
   $sql->bindParam(":id", $id);
   $sql->bindParam(":name", $name);
@@ -37,9 +56,11 @@ if (isset($_POST['update'])) {
   if ($sql) {
     $_SESSION['success'] = "บันทึกข้อมูลเรียบร้อยแล้ว";
     header("location: admin-drink.php");
+    exit;
   } else {
     $_SESSION['error'] = "ไม่สามารถบันทึกข้อมูลได้";
     header("location: admin-drink.php");
+    exit;
   }
 }
 
@@ -108,7 +129,7 @@ if (isset($_POST['update'])) {
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="admin-index.php" class="logo">
+            <a href="../admin-index.php" class="logo">
               <img src="../assets/images/logo.png" alt="">
             </a>
             <!-- ***** Logo End ***** -->
@@ -204,7 +225,7 @@ if (isset($_POST['update'])) {
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+          <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
 
         </div>
       </div>

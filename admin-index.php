@@ -4,6 +4,7 @@ require_once("config.php");
 if (!isset($_SESSION['admin_login'])) {
   $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
   header('location:login.php');
+  exit;
 }
 ?>
 <!DOCTYPE html>
@@ -179,7 +180,7 @@ if (!isset($_SESSION['admin_login'])) {
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+          <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
 
 
         </div>

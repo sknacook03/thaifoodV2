@@ -1,6 +1,11 @@
 <?php
 session_start();
 require_once("../config.php");
+if (!isset($_SESSION['admin_login'])) {
+  $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+  header('location:../login.php');
+  exit;
+}
 
 if (isset($_GET['delete'])) {
   $delete_id = $_GET['delete'];
@@ -68,7 +73,7 @@ if (isset($_GET['delete'])) {
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="admin-index.php" class="logo">
+            <a href="../admin-index.php" class="logo">
               <img src="../assets/images/logo.png" alt="">
             </a>
             <!-- ***** Logo End ***** -->
@@ -151,22 +156,25 @@ if (isset($_GET['delete'])) {
   <div class="container">
     <div class="row">
       <div class="page-content" id="searchResults">
-      <?php if (isset($_SESSION['success'])) { ?>
-        <div class="alert alert-success">
-          <?php
-          echo $_SESSION['success'];
-          unset($_SESSION['success']);
-          ?>
-        </div>
-      <?php } ?>
-      <?php if (isset($_SESSION['error'])) { ?>
-        <div class="alert alert-danger">
-          <?php
-          echo $_SESSION['error'];
-          unset($_SESSION['error']);
-          ?>
-        </div>
-      <?php } ?>
+        <?php if (isset($_SESSION['success'])) { ?>
+          <div class="alert alert-success">
+            <?php echo $_SESSION['success']; ?>
+          </div>
+          <script>
+            setTimeout(function() {
+              window.location.href = 'admin-drink.php';
+            }, 2000);
+          </script>
+          <?php unset($_SESSION['success']); ?>
+        <?php } ?>
+        <?php if (isset($_SESSION['error'])) { ?>
+          <div class="alert alert-danger">
+            <?php
+            echo $_SESSION['error'];
+            unset($_SESSION['error']);
+            ?>
+          </div>
+        <?php } ?>
         <div class="col-md-12 d-flex mb-3">
           <h2>Drink</h2>
           <div class="col-md-11 d-flex justify-content-end">
@@ -262,7 +270,7 @@ if (isset($_GET['delete'])) {
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+            <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
 
 
           </div>

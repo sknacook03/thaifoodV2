@@ -1,6 +1,11 @@
 <?php
-session_start();
-require_once("../config.php");
+    session_start();
+    require_once("../config.php");
+    if(!isset($_SESSION['admin_login'])){
+      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+      header('location:../login.php');
+      exit;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +60,7 @@ require_once("../config.php");
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="admin-index.php" class="logo">
+            <a href="../admin-index.php" class="logo">
               <img src="../assets/images/logo.png" alt="">
             </a>
             <!-- ***** Logo End ***** -->
@@ -127,7 +132,7 @@ require_once("../config.php");
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+          <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
         </div>
       </div>
     </div>

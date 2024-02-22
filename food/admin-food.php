@@ -1,6 +1,11 @@
 <?php
-session_start();
-require_once("../config.php");
+    session_start();
+    require_once("../config.php");
+    if(!isset($_SESSION['admin_login'])){
+      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+      header('location:../login.php');
+      exit;
+  }
 
 if (isset($_GET['delete'])) {
   $delete_id = $_GET['delete'];
@@ -152,13 +157,16 @@ if (isset($_GET['delete'])) {
   <div class="container">
     <div class="row">
       <div class="page-content" id="searchResults">
-        <?php if (isset($_SESSION['success'])) { ?>
+      <?php if (isset($_SESSION['success'])) { ?>
           <div class="alert alert-success">
-            <?php
-            echo $_SESSION['success'];
-            unset($_SESSION['success']);
-            ?>
+            <?php echo $_SESSION['success']; ?>
           </div>
+          <script>
+            setTimeout(function() {
+              window.location.href = 'admin-drink.php';
+            }, 2000);
+          </script>
+          <?php unset($_SESSION['success']); ?>
         <?php } ?>
         <?php if (isset($_SESSION['error'])) { ?>
           <div class="alert alert-danger">
@@ -260,7 +268,7 @@ if (isset($_GET['delete'])) {
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+            <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
 
 
           </div>

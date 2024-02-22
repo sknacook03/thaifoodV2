@@ -4,6 +4,7 @@ require_once("../config.php");
 if (!isset($_SESSION['user_login'])) {
   $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
   header('location:../login.php');
+  exit;
 }
 ?>
 <!DOCTYPE html>
@@ -98,8 +99,8 @@ if (!isset($_SESSION['user_login'])) {
       <div class="col-lg-12">
         <div class="page-content">
           <div class="nav-manu">
-            <li><a href="#section02">ประเภทตำ</a></li>
             <li><a href="#section01">ประเภทต้ม</a></li>
+            <li><a href="#section02">ประเภทตำ</a></li>
             <li><a href="#section04">ประเภทผัด</a></li>
             <li><a href="#section03">ประเภททอด</a></li>
           </div>
@@ -227,7 +228,7 @@ if (!isset($_SESSION['user_login'])) {
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <p>Copyright © 2036 <a href="#">THAI FOOD</a> Company. All rights reserved.
+            <p>© 2024 <a href="#">THAI FOOD</a> Company. All rights reserved.
 
 
           </div>

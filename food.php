@@ -87,8 +87,8 @@ unset($_SESSION['input_values']);
       <div class="col-lg-12">
         <div class="page-content">
           <div class="nav-manu">
-            <li><a href="#section02">ประเภทตำ</a></li>
             <li><a href="#section01">ประเภทต้ม</a></li>
+            <li><a href="#section02">ประเภทตำ</a></li>
             <li><a href="#section04">ประเภทผัด</a></li>
             <li><a href="#section03">ประเภททอด</a></li>
           </div>
@@ -156,7 +156,7 @@ unset($_SESSION['input_values']);
                   </div>
                   <div class="row text-white">
                     <?php
-                    $itemsPerPage = 4;
+                    $itemsPerPage = 1;
                     $totalItems = count($typeFoods);
                     $totalPages = ceil($totalItems / $itemsPerPage);
                     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -185,12 +185,15 @@ unset($_SESSION['input_values']);
                   <div class="pagination">
                     <?php
 
+                    $pagesToShow = 3;
+
                     $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
                     $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
 
+                    $startPage = max(1, $currentPage - floor($pagesToShow / 2));
+                    $endPage = min($totalPages, $startPage + $pagesToShow - 1);
 
-                    $startPage = max(1, $currentPage - 1);
-                    $endPage = min($totalPages, $currentPage + 1);
+                    $startPage = max(1, $endPage - $pagesToShow + 1);
 
                     echo "<a class='prev-next' href='?page=$prevPage'>&laquo; ก่อนหน้า</a>";
 
@@ -202,6 +205,7 @@ unset($_SESSION['input_values']);
                     echo "<a class='prev-next' href='?page=$nextPage'>ถัดไป &raquo;</a>";
                     ?>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -217,7 +221,7 @@ unset($_SESSION['input_values']);
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <p>Copyright © 2036 <a href="#">THAI FOOD</a> Company. All rights reserved.
+            <p>© 2024 <a href="#">THAI FOOD</a> Company. All rights reserved.
 
 
           </div>

@@ -42,6 +42,16 @@ if (isset($_POST['signin'])) {
             'number' => $number,
         ];
         header("location:login.php");
+    }else if (strpos($password, ' ') !== false){
+        $_SESSION['error'] = 'กรุณากรอกรหัสผ่านโดยไม่มีช่องว่าง';
+        $_SESSION['input_values'] = [
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'number' => $number,
+        ];
+        header("location: login.php");
+        exit; 
     } else {
         try {
             $check_data = $conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -55,10 +65,12 @@ if (isset($_POST['signin'])) {
                             $_SESSION['admin_login'] = $row['userID'];
                             unset($_SESSION['input_value']);
                             header("location:admin-index.php");
+                            exit;
                         } else {
                             $_SESSION['user_login'] = $row['userID'];
                             unset($_SESSION['input_value']);
                             header("location:userlogin/userIndex.php");
+                            exit;
                         }
                     } else {
                         $_SESSION['error'] = 'รหัสผ่านผิด';
@@ -69,10 +81,12 @@ if (isset($_POST['signin'])) {
                             'number' => $number,
                         ];
                         header("location:login.php");
+                        exit;
                     }
                 } else {
                     $_SESSION['error'] = 'อีเมลผิด';
                     header("location:login.php");
+                    exit;
                 }
             } else {
                 $_SESSION['error'] = "ไม่มีข้อมูลในระบบ!";
@@ -83,6 +97,7 @@ if (isset($_POST['signin'])) {
                     'number' => $number,
                 ];
                 header("location:login.php");
+                exit;
             }
         } catch (PDOException $e) {
             echo $e->getMessage();

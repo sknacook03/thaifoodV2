@@ -112,14 +112,13 @@ unset($_SESSION['input_values']);
                 </div>
                 <div class="row">
                   <?php
-                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE id BETWEEN 1 AND 8");
                   $stmt->execute();
                   $foods = $stmt->fetchAll();
                   if (!$foods) {
                     echo "<tr><td colspan='6' class='text-center' style='color: white;'>No food found</td></tr>";
                   } else {
                     foreach ($foods as $food) {
-                      if ($food['id'] <= 8) {
                   ?>
                         <div class="col-lg-3 col-sm-6">
                           <div class="item">
@@ -132,7 +131,7 @@ unset($_SESSION['input_values']);
                         </div>
                   <?php   }
                     }
-                  } ?>
+                   ?>
                   <div class="col-lg-12">
                     <div class="main-button">
                       <a href="food.php">Discover Popular</a>
@@ -154,7 +153,7 @@ unset($_SESSION['input_values']);
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Thai Food</a> Company. All rights reserved.
+          <p>© 2024 <a href="#">Thai Food</a> Company. All rights reserved.
 
 
         </div>
