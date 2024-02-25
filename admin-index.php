@@ -110,9 +110,7 @@ if (!isset($_SESSION['admin_login'])) {
           echo "<th scope=\"col\">userID</th>";
           echo "<th scope=\"col\">ชื่อ</th>";
           echo "<th scope=\"col\">นามสกุล</th>";
-          echo "<th scope=\"col\">email</th>";
-          echo "<th scope=\"col\">เบอร์โทร</th>";
-          echo "<th scope=\"col\">role</th>";
+          echo "<th scope=\"col\">ตัวเลือก</th>";
           echo "</tr>";
           echo "</thead>";
           echo "<tbody>";
@@ -135,9 +133,7 @@ if (!isset($_SESSION['admin_login'])) {
               echo "<th scope=\"row\">" . $user['userID'] . "</th>";
               echo "<td>" . $user['firstname'] . "</td>";
               echo "<td>" . $user['lastname'] . "</td>";
-              echo "<td>" . $user['email'] . "</td>";
-              echo "<td>" . $user['number'] . "</td>";
-              echo "<td>" . $user['role'] . "</td>";
+              echo "<td>" . "<a href=\"view.php?userID=" . $user['userID'] . "\" class=\"btn btn-warning\">info</a>" . "</td>";
               echo "</tr>";
             }
           }

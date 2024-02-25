@@ -101,6 +101,16 @@ if (isset($_POST['signup'])) {
         ];
         header("location:login.php");
         exit;
+    } else if (strpos($number, '0') !== 0) {
+        $_SESSION['error'] = 'กรุณากรอกเบอร์โทรศัพท์โดยมีเลข 0 นำหน้า';
+        $_SESSION['input_values'] = [
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'number' => $number,
+        ];
+        header("location:login.php");
+        exit;
     } else if (!is_numeric($number)) {
         $_SESSION['error'] = 'กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลข';
         $_SESSION['input_values'] = [

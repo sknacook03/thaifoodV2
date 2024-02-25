@@ -168,7 +168,7 @@ if (!isset($_SESSION['user_login'])) {
                   </div>
                   <div class="row text-white">
                     <?php
-                    $itemsPerPage = 2;
+                    $itemsPerPage = 4;
                     $totalItems = count($typeFoods);
                     $totalPages = ceil($totalItems / $itemsPerPage);
                     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;

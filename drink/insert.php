@@ -23,13 +23,17 @@ if (isset($_POST['submit'])) {
                 $count = $check->rowCount();
 
                 if ($count > 0) {
-                    $_SESSION['error'] = "ชื่ออาหารซํ้ากัน";
+                    $_SESSION['error'] = "ชื่อเครื่องดื่มซํ้ากัน";
                     header("location: admin-drink.php");
                     exit;
-                }else if (strpos($name, ' ') !== false){
+                } else if (strpos($name, ' ') !== false) {
                     $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มโดยไม่มีช่องว่าง';
                     header("location: admin-drink.php");
-                    exit; 
+                    exit;
+                } else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
+                    $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
+                    header("location: admin-drink.php");
+                    exit;
                 } else {
                     $sql = $conn->prepare("INSERT INTO drink (name, type, price, img) VALUES(:name, :type, :price, :img)");
                     $sql->bindParam(":name", $name, PDO::PARAM_STR);

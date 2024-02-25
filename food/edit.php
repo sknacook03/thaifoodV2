@@ -1,11 +1,11 @@
 <?php
-    session_start();
-    require_once("../config.php");
-    if(!isset($_SESSION['admin_login'])){
-      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
-      header('location:../login.php');
-      exit;
-  }
+session_start();
+require_once("../config.php");
+if (!isset($_SESSION['admin_login'])) {
+  $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+  header('location:../login.php');
+  exit;
+}
 
 if (isset($_POST['update'])) {
   $id = $_POST['id'];
@@ -41,11 +41,15 @@ if (isset($_POST['update'])) {
     $_SESSION['error'] = "ชื่ออาหารนี้มีอยู่แล้วในระบบ";
     header("location: admin-food.php");
     exit;
-  }else if (strpos($name, ' ') !== false){
+  } else if (strpos($name, ' ') !== false) {
     $_SESSION['error'] = 'กรุณากรอกชื่อโดยไม่มีช่องว่าง';
     header("location: admin-food.php");
-    exit; 
-}
+    exit;
+  } else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
+    $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
+    header("location: admin-drink.php");
+    exit;
+  }
 
   $sql = $conn->prepare("UPDATE food SET name = :name, type = :type, price = :price, img = :img WHERE id = :id");
   $sql->bindParam(":id", $id);
@@ -202,7 +206,7 @@ if (isset($_POST['update'])) {
             </div>
             <div class="mb-3 text-white">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="number" value="<?= $data['price']; ?>" required class="form-control" name="price">
+              <input type="number" value="<?= $data['price']; ?>" required class="form-control" name="price" id="priceInput">
               <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
             </div>
             <div class="mb-3 text-white ">
@@ -240,6 +244,16 @@ if (isset($_POST['update'])) {
       let inputValue = event.target.value;
       if (!/^\d*\.?\d*$/.test(inputValue)) {
         event.target.value = inputValue.replace(/[^\d.]/g, '');
+      }
+    });
+  </script>
+  <script>
+    document.getElementById("priceInput").addEventListener("input", function() {
+      var price = this.value.trim();
+      if (price.startsWith("0")) {
+        this.setCustomValidity("ห้ามใส่เลข 0 นำหน้า");
+      } else {
+        this.setCustomValidity("");
       }
     });
   </script>

@@ -1,11 +1,11 @@
 <?php
-    session_start();
-    require_once("../config.php");
-    if(!isset($_SESSION['admin_login'])){
-      $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
-      header('location:../login.php');
-      exit;
-  }
+session_start();
+require_once("../config.php");
+if (!isset($_SESSION['admin_login'])) {
+  $_SESSION['error'] = 'กรุณาอย่าเหลี่ยม!!!!!!!';
+  header('location:../login.php');
+  exit;
+}
 
 if (isset($_GET['delete'])) {
   $delete_id = $_GET['delete'];
@@ -108,7 +108,7 @@ if (isset($_GET['delete'])) {
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Food</h5>
+          <h5 class="modal-title text-black" id="exampleModalLabel">Add Food</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -120,6 +120,7 @@ if (isset($_GET['delete'])) {
             <div class="mb-3">
               <label for="Name" class="col-form-label">ประเภทอาหาร:</label>
               <select type="text" required class="form-control" name="type">
+              <option value="" disabled selected>เลือกประเภท</option>
                 <?php
                 $stmt = $conn->query("SELECT * FROM type ORDER BY typeID");
                 $stmt->execute();
@@ -136,7 +137,7 @@ if (isset($_GET['delete'])) {
             </div>
             <div class="mb-3">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="number" required class="form-control" name="price">
+              <input type="number" required class="form-control" name="price" id="priceInput">
               <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
 
             </div>
@@ -157,15 +158,10 @@ if (isset($_GET['delete'])) {
   <div class="container">
     <div class="row">
       <div class="page-content" id="searchResults">
-      <?php if (isset($_SESSION['success'])) { ?>
+        <?php if (isset($_SESSION['success'])) { ?>
           <div class="alert alert-success">
             <?php echo $_SESSION['success']; ?>
           </div>
-          <script>
-            setTimeout(function() {
-              window.location.href = 'admin-drink.php';
-            }, 2000);
-          </script>
           <?php unset($_SESSION['success']); ?>
         <?php } ?>
         <?php if (isset($_SESSION['error'])) { ?>
@@ -222,7 +218,7 @@ if (isset($_GET['delete'])) {
                   <td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/<?= $food['img']; ?>" class="rounded" alt=""></td>
                   <td>
                     <a href="edit.php?id=<?= $food['id']; ?>" class="btn btn-warning">Edit</a>
-                    <a href="?delete=<?= $food['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบใช่หรือไม่?')">Delete</a>
+                    <a href="?delete=<?= $food['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบ <?= $food['name']; ?> ใช่หรือไม่?')">Delete</a>
                   </td>
                 </tr>
             <?php
@@ -286,6 +282,16 @@ if (isset($_GET['delete'])) {
         }
       });
     </script>
+     <script>
+    document.getElementById("priceInput").addEventListener("input", function() {
+        var price = this.value.trim();
+        if (price.startsWith("0")) {
+            this.setCustomValidity("ห้ามใส่เลข 0 นำหน้า");
+        } else {
+            this.setCustomValidity("");
+        }
+    });
+</script>
     <script>
       $(document).ready(function() {
         $('#searchText').on('input', function() {

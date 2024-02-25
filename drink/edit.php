@@ -45,6 +45,10 @@ if (isset($_POST['update'])) {
     $_SESSION['error'] = 'กรุณากรอกชื่อโดยไม่มีช่องว่าง';
     header("location: admin-drink.php");
     exit; 
+}else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
+  $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
+  header("location: admin-drink.php");
+  exit;
 }
   $sql = $conn->prepare("UPDATE drink SET name = :name, type = :type, price = :price, img = :img WHERE id = :id");
   $sql->bindParam(":id", $id);
@@ -202,7 +206,7 @@ if (isset($_POST['update'])) {
             </div>
             <div class="mb-3 text-white">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="number" value="<?= $data['price']; ?>" required class="form-control" name="price">
+              <input type="number" value="<?= $data['price']; ?>" required class="form-control" name="price" id="priceInput">
               <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
             </div>
             <div class="mb-3 text-white ">
@@ -242,6 +246,16 @@ if (isset($_POST['update'])) {
       }
     });
   </script>
+    <script>
+    document.getElementById("priceInput").addEventListener("input", function() {
+        var price = this.value.trim();
+        if (price.startsWith("0")) {
+            this.setCustomValidity("ห้ามใส่เลข 0 นำหน้า");
+        } else {
+            this.setCustomValidity("");
+        }
+    });
+</script>
   <!-- Bootstrap core JavaScript -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>

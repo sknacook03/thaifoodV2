@@ -26,10 +26,14 @@ if (isset($_POST['submit'])) {
                     $_SESSION['error'] = "ชื่ออาหารซํ้ากัน";
                     header("location: admin-food.php");
                     exit;
-                }else if (strpos($name, ' ') !== false){
+                } else if (strpos($name, ' ') !== false) {
                     $_SESSION['error'] = 'กรุณากรอกชื่ออาหารโดยไม่มีช่องว่าง';
                     header("location: admin-food.php");
-                    exit; 
+                    exit;
+                } else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
+                    $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
+                    header("location: admin-drink.php");
+                    exit;
                 } else {
                     $sql = $conn->prepare("INSERT INTO food (name, type, price, img) VALUES(:name, :type, :price, :img)");
                     $sql->bindParam(":name", $name, PDO::PARAM_STR);

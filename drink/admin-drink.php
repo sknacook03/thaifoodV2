@@ -108,7 +108,7 @@ if (isset($_GET['delete'])) {
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Food</h5>
+          <h5 class="modal-title text-black" id="exampleModalLabel">Add Food</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -120,6 +120,8 @@ if (isset($_GET['delete'])) {
             <div class="mb-3">
               <label for="Name" class="col-form-label">ประเภทอาหาร:</label>
               <select type="text" required class="form-control" name="type">
+              <option value="" disabled selected>เลือกประเภท</option>
+                เลือกประเภท
                 <?php
                 $stmt = $conn->query("SELECT * FROM type ORDER BY typeID");
                 $stmt->execute();
@@ -136,7 +138,7 @@ if (isset($_GET['delete'])) {
             </div>
             <div class="mb-3">
               <label for="Name" class="col-form-label">ราคา:</label>
-              <input type="number" required class="form-control" name="price">
+              <input type="number" required class="form-control" name="price" id="priceInput">
               <small id="priceHelp" class="form-text text-muted">โปรดป้อนตัวเลขเท่านั้น</small>
             </div>
             <div class="mb-3">
@@ -160,11 +162,6 @@ if (isset($_GET['delete'])) {
           <div class="alert alert-success">
             <?php echo $_SESSION['success']; ?>
           </div>
-          <script>
-            setTimeout(function() {
-              window.location.href = 'admin-drink.php';
-            }, 2000);
-          </script>
           <?php unset($_SESSION['success']); ?>
         <?php } ?>
         <?php if (isset($_SESSION['error'])) { ?>
@@ -221,7 +218,7 @@ if (isset($_GET['delete'])) {
                   <td width="150px"><img width="150px" height="150px" style="object-fit: cover;" src="uploads/<?= $Drink['img']; ?>" class="rounded" alt=""></td>
                   <td>
                     <a href="edit.php?id=<?= $Drink['id']; ?>" class="btn btn-warning">Edit</a>
-                    <a href="?delete=<?= $Drink['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบใช่หรือไม่?')">Delete</a>
+                    <a href="?delete=<?= $Drink['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณต้องการลบคุณต้องการลบ <?= $Drink['name']; ?> ใช่หรือไม่?ใช่หรือไม่?')">Delete</a>
                   </td>
                 </tr>
             <?php
@@ -285,6 +282,16 @@ if (isset($_GET['delete'])) {
         let inputValue = event.target.value;
         if (!/^\d*\.?\d*$/.test(inputValue)) {
           event.target.value = inputValue.replace(/[^\d.]/g, '');
+        }
+      });
+    </script>
+    <script>
+      document.getElementById("priceInput").addEventListener("input", function() {
+        var price = this.value.trim();
+        if (price.startsWith("0")) {
+          this.setCustomValidity("ห้ามใส่เลข 0 นำหน้า");
+        } else {
+          this.setCustomValidity("");
         }
       });
     </script>
