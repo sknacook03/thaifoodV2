@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
                     exit;
                 } else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
                     $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
-                    header("location: admin-drink.php");
+                    header("location: admin-food.php");
                     exit;
                 } else {
                     $sql = $conn->prepare("INSERT INTO food (name, type, price, img) VALUES(:name, :type, :price, :img)");

@@ -46,8 +46,8 @@ if (isset($_POST['update'])) {
     header("location: admin-food.php");
     exit;
   } else if (!preg_match("/^[a-zA-Zก-๏เ\s]+$/u", $name)) {
-    $_SESSION['error'] = 'กรุณากรอกชื่อเครื่องดื่มเป็นภาษาไทยหรืออังกฤษเท่านั้น';
-    header("location: admin-drink.php");
+    $_SESSION['error'] = 'กรุณากรอกชื่ออาหารเป็นภาษาไทยหรืออังกฤษเท่านั้น';
+    header("location: admin-food.php");
     exit;
   }
 

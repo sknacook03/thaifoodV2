@@ -101,8 +101,8 @@ if (!isset($_SESSION['user_login'])) {
           <div class="nav-manu">
             <li><a href="#section01">ประเภทต้ม</a></li>
             <li><a href="#section02">ประเภทตำ</a></li>
-            <li><a href="#section04">ประเภทผัด</a></li>
             <li><a href="#section03">ประเภททอด</a></li>
+            <li><a href="#section04">ประเภทผัด</a></li>
           </div>
           <!-- ***** Featured Games Start ***** -->
           <div class="row">

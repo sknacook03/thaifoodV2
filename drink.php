@@ -92,7 +92,7 @@ require_once("config.php");
             <div class="col-lg-8">
               <div class="featured-games header-text">
                 <div class="heading-section" id="js-menu">
-                  <h4><em>แนะนำ</em> อาหาร</h4>
+                  <h4><em>แนะนำ</em> เครื่องดื่ม</h4>
                 </div>
                 <div class="owl-features owl-carousel">
                   <?php

@@ -221,9 +221,7 @@ if (!isset($_SESSION['admin_login'])) {
           "<th scope=\"col\">userID</th>" +
           "<th scope=\"col\">ชื่อ</th>" +
           "<th scope=\"col\">นามสกุล</th>" +
-          "<th scope=\"col\">email</th>" +
-          "<th scope=\"col\">เบอร์โทร</th>" +
-          "<th scope=\"col\">role</th>" +
+          "<th scope=\"col\">ตัวเลือก</th>" +
           "</tr>" +
           "</thead>" +
           "<tbody>";
@@ -231,13 +229,11 @@ if (!isset($_SESSION['admin_login'])) {
         var tableBody = '';
         results.forEach(function(user) {
           tableBody += "<tr>" +
-            "<th scope=\"row\">" + user.userID + "</th>" +
-            "<td>" + user.firstname + "</td>" +
-            "<td>" + user.lastname + "</td>" +
-            "<td>" + user.email + "</td>" +
-            "<td>" + user.number + "</td>" +
-            "<td>" + user.role + "</td>" +
-            "</tr>";
+   "<th scope=\"row\">" + user['userID'] + "</th>" +
+   "<td>" + user['firstname'] + "</td>" +
+   "<td>" + user['lastname'] + "</td>" +
+   "<td>" + "<a href=\"view.php?userID=" + user['userID'] + "\" class=\"btn btn-warning\">info</a>" + "</td>" +
+   "</tr>";
         });
 
         var tableEnd = '</tbody>' +
