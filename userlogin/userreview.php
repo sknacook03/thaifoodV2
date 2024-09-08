@@ -79,6 +79,7 @@ if (!isset($_SESSION['user_login'])) {
               <li><a href="userdrink.php">เครื่องดื่ม</a></li>
               <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
               <li><a href="userreview.php" class="active">รีวิวลูกค้า</a></li>
+              <li><a href="userfavorite.php">Favorite</a></li>
               <!-- <li><a href="info.html">ติดต่อเรา</a></li> -->
               <li><a><?php echo $row['firstname'] ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
             </ul>
