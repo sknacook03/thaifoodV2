@@ -29,6 +29,7 @@ if (!isset($_SESSION['user_login'])) {
   <link rel="stylesheet" href="../assets/css/owl.css">
   <link rel="stylesheet" href="../assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -79,6 +80,7 @@ if (!isset($_SESSION['user_login'])) {
               <li><a href="userdrink.php" class="active">เครื่องดื่ม</a></li>
               <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
               <li><a href="userreview.php">รีวิวลูกค้า</a></li>
+              <li><a href="userfavorite.php">Favorite</a></li>
               <!-- <li><a href="info.html">ติดต่อเรา</a></li> -->
               <li><a href="userprofile.php"><?php echo $row['firstname'] ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
             </ul>
@@ -126,7 +128,7 @@ if (!isset($_SESSION['user_login'])) {
                         </div>
                         <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
                         <ul>
-                          <li><i class="fa fa-star"></i> <?= $drink['price']; ?> .-</li>
+                        <li><i class="fa fa-star-o star-toggle" data-drink-id="<?= $drink['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
 
                         </ul>
                       </div>
@@ -166,7 +168,7 @@ if (!isset($_SESSION['user_login'])) {
                           <img class="zoom" src="../drink/uploads/<?= $drink['img']; ?>" alt="">
                           <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
                           <ul>
-                            <li><i class="fa fa-star"></i> <?= $drink['price']; ?>-.</li>
+                          <li><i class="fa fa-star-o star-toggle" data-drink-id="<?= $drink['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
                           </ul>
                         </div>
                       </div>
@@ -231,6 +233,7 @@ if (!isset($_SESSION['user_login'])) {
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../assets/js/rolling-back.js"></script>
+    <script src="../assets/js/star.js"></script>
     <script src="../assets/js/isotope.min.js"></script>
     <script src="../assets/js/owl-carousel.js"></script>
     <script src="../assets/js/tabs.js"></script>
