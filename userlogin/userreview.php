@@ -80,7 +80,7 @@ if (!isset($_SESSION['user_login'])) {
               <!-- <li><a href="streams.html">โปรโมชั่น</a></li> -->
               <li><a href="userreview.php" class="active">รีวิวลูกค้า</a></li>
               <!-- <li><a href="info.html">ติดต่อเรา</a></li> -->
-              <li><a><?php echo $row['firstname'] ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
+              <li><a href="userprofile.php"><?php echo $row['firstname'] ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
             </ul>
             <a href="../logout.php" class="btn btn-danger mb-5 mt-1">logout</a>
             <a class='menu-trigger'>
