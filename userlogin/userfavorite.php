@@ -81,7 +81,7 @@ $user_id = $_SESSION['user_login'];
                             <li><a href="userdrink.php">เครื่องดื่ม</a></li>
                             <li><a href="userreview.php">รีวิวลูกค้า</a></li>
                             <li><a href="userfavorite.php" class="active">Favorite</a></li>
-                            <li><a><?php echo htmlspecialchars($row['firstname']) ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
+                            <li><a href="userprofile.php"><?php echo htmlspecialchars($row['firstname']) ?> <img src="../assets/images/profile-header.jpg" alt=""></a></li>
                         </ul>
                         <a href="../logout.php" class="btn btn-danger mb-5 mt-1">logout</a>
                         <a class='menu-trigger'>
