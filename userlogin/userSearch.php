@@ -105,150 +105,84 @@ if (!isset($_SESSION['user_login'])) {
             <div class="row">
               <div class="col-lg-12">
                 <?php
-                if (isset($_POST['searchfood'])) {
-                  $searchFood = $_POST['searchfood'];
-                  // Search for food in the database
-                  $stmt = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $stmt->execute(["%$searchFood%", "%$searchFood%"]);
-                  $foods = $stmt->fetchAll();
-                  $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $countStmt->execute(["%$searchFood%", "%$searchFood%"]);
-                  $totalFoods = $countStmt->fetchColumn();
-                  echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalFoods . " รายการ</h6>";
-                  if (!$foods) {
-                    echo "<h3>ไม่พบข้อมูล</h3>";
-                  } else {
-                    echo '<div class="heading-section">
-                                            <h4><em>ประเภท' . $foods[0]['typeName'] . '</em></h4>
-                                            </div>';
-                ?>
-                    <div class="row text-white">
-                      <?php
-                      foreach ($foods as $food) {
-                      ?>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                            <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                            <ul>
-                              <li><i class="fa fa-star-o star-toggle" data-id="<?= $food['id']; ?>" style="cursor:pointer"></i> <?= $food['price']; ?> .-</li>
-                            </ul>
-                          </div>
-                        </div>
-                      <?php
-                      }
-                      ?>
-                    </div>
-                  <?php
-                  }
-                } elseif (isset($_POST['searchdrink'])) {
-                  $searchDrink = $_POST['searchdrink'];
-                  $stmt = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $stmt->execute(["%$searchDrink%", "%$searchDrink%"]);
-                  $drinks = $stmt->fetchAll();
-                  $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $countStmt->execute(["%$searchDrink%", "%$searchDrink%"]);
-                  $totalDrinks = $countStmt->fetchColumn();
-                  echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalDrinks . " รายการ</h6>";
-                  if (!$drinks) {
-                    echo "<h3>ไม่พบข้อมูล</h3>";
-                  } else {
-                    echo '<div class="heading-section">
-                                            <h4><em>ประเภท' . $drinks[0]['typeName'] . '</em></h4>
-                                            </div>';
-                  ?>
-                    <div class="row text-white">
-                      <?php
-                      foreach ($drinks as $drink) {
-                      ?>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <img class="zoom" src="../drink/uploads/<?= $drink['img']; ?>" alt="">
-                            <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
-                            <ul>
-                              <li><i class="fa fa-star-o star-toggle" data-id="<?= $drink['id']; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
-                            </ul>
-                          </div>
-                        </div>
-                      <?php
-                      }
-                      ?>
-                    </div>
-                    <?php
-                  }
-                } elseif (isset($_POST['search'])) {
-                  $searchTerm = $_POST['search'];
-                  $stmtFood = $conn->prepare("SELECT * FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $stmtFood->execute(["%$searchTerm%", "%$searchTerm%"]);
+                if (isset($_POST['searchfood']) || isset($_POST['searchdrink']) || isset($_POST['search'])) {
+                  // ตั้งค่าคำค้นหาตามแต่ละกรณี
+                  $searchTerm = isset($_POST['searchfood']) ? $_POST['searchfood'] : (isset($_POST['searchdrink']) ? $_POST['searchdrink'] : $_POST['search']);
+
+                  // ค้นหาข้อมูลอาหาร
+                  $stmtFood = $conn->prepare("
+                  SELECT food.id, food.name, food.img, food.price, type.typeName,
+                  IF(user_favorites.food_id IS NOT NULL, 1, 0) AS is_favorite
+                  FROM food 
+                  JOIN type ON food.type = type.typeID
+                  LEFT JOIN user_favorites ON food.id = user_favorites.food_id AND user_favorites.user_id = ?
+                  WHERE food.name LIKE ? OR type.typeName LIKE ?
+              ");
+                  $stmtFood->execute([$user_id, "%$searchTerm%", "%$searchTerm%"]);
                   $foods = $stmtFood->fetchAll();
 
-                  $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM food JOIN type ON food.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $countStmt->execute(["%$searchTerm%", "%$searchTerm%"]);
-                  $totalFoods = $countStmt->fetchColumn();
-
-                  $stmtDrink = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $stmtDrink->execute(["%$searchTerm%", "%$searchTerm%"]);
+                  // ค้นหาข้อมูลเครื่องดื่ม
+                  $stmtDrink = $conn->prepare("
+                  SELECT drink.id, drink.name, drink.img, drink.price, type.typeName,
+                  IF(user_favorites_drink.drink_id IS NOT NULL, 1, 0) AS is_favorite 
+                  FROM drink 
+                  JOIN type ON drink.type = type.typeID 
+                  LEFT JOIN user_favorites_drink ON drink.id = user_favorites_drink.drink_id AND user_favorites_drink.user_id = ?
+                  WHERE drink.name LIKE ? OR type.typeName LIKE ?
+              ");
+                  $stmtDrink->execute([$user_id, "%$searchTerm%", "%$searchTerm%"]);
                   $drinks = $stmtDrink->fetchAll();
 
-                  $countStmt = $conn->prepare("SELECT COUNT(id) AS total FROM drink JOIN type ON drink.type = type.typeID WHERE name LIKE ? OR type.typename LIKE ?");
-                  $countStmt->execute(["%$searchTerm%", "%$searchTerm%"]);
-                  $totalDrinks = $countStmt->fetchColumn();
+                  // รวมจำนวนอาหารและเครื่องดื่มที่พบ
+                  $totalFoods = count($foods);
+                  $totalDrinks = count($drinks);
+                  $totalItems = $totalFoods + $totalDrinks;
+
+                  echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalItems . " รายการ</h6>";
+
+                  // ฟังก์ชันสำหรับแสดงรายการอาหาร/เครื่องดื่ม
+                  function displayItems($items, $title, $type, $user_id)
+                  {
+                    if ($items) {
+                      echo '<div class="heading-section"><h4><em>' . $title . '</em></h4></div>';
+                      echo '<div class="row text-white">';
+                      foreach ($items as $item) {
+                        $isFavorite = isset($item['is_favorite']) && $item['is_favorite'] ? 'fa-star' : 'fa-star-o';
+                        echo '<div class="col-lg-3 col-sm-6">
+                                    <div class="item">
+                                        <img class="zoom" src="../' . $type . '/uploads/' . $item['img'] . '" alt="">
+                                        <h4>' . $item['name'] . '<br><span>ประเภท : ' . $item['typeName'] . '</span></h4>
+                                        <ul>
+                                          <li>
+                                            <i class="fa ' . $isFavorite . ' star-toggle"
+                                              data-'. $type . '-id="' . $item['id'] . '"
+                                              data-user-id="' . $user_id . '"
+                                              style="cursor:pointer"></i>
+                                            ' . $item['price'] . ' .-
+                                          </li>
+                                        </ul>
+                                    </div>
+                                  </div>';
+                      }
+                      echo '</div>';
+                    }
+                  }
+
+                  // แสดงรายการอาหาร
+                  displayItems($foods, 'อาหาร', 'food', $user_id);
+
+                  // แสดงรายการเครื่องดื่ม
+                  displayItems($drinks, 'เครื่องดื่ม', 'drink', $user_id);
+
+                  // กรณีที่ไม่พบข้อมูล
                   if (!$foods && !$drinks) {
                     echo "<h3>ไม่พบข้อมูล</h3>";
-                  } else {
-                    if ($foods) {
-                      echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalFoods . " รายการ</h6>";
-                      echo '<div class="heading-section">
-                                            <h4><em>ประเภท' . $foods[0]['typeName'] . '</em></h4>
-                                            </div>';
-                    ?>
-                      <div class="row text-white">
-                        <?php
-                        foreach ($foods as $food) {
-                        ?>
-                          <div class="col-lg-3 col-sm-6">
-                            <div class="item">
-                              <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
-                              <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
-                              <ul>
-                              <li><i class="fa fa-star-o star-toggle" data-id="<?= $food['id']; ?>" style="cursor:pointer"></i> <?= $food['price']; ?> .-</li>
-                              </ul>
-                            </div>
-                          </div>
-                        <?php
-                        }
-                        ?>
-                      </div>
-                    <?php
-                    }
-                    if ($drinks) {
-                      echo "<h6 class=\"mb-4\" style=\"color: #666;\">ค้นพบ " . $totalDrinks . " รายการ</h6>";
-                      echo '<div class="heading-section">
-                                            <h4><em>ประเภท' . $drinks[0]['typeName'] . '</em></h4>
-                                            </div>';
-                    ?>
-                      <div class="row text-white">
-                        <?php
-                        foreach ($drinks as $drink) {
-                        ?>
-                          <div class="col-lg-3 col-sm-6">
-                            <div class="item">
-                              <img class="zoom" src="../drink/uploads/<?= $drink['img']; ?>" alt="">
-                              <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
-                              <ul>
-                              <li><i class="fa fa-star-o star-toggle" data-id="<?= $drink['id']; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
-                              </ul>
-                            </div>
-                          </div>
-                        <?php
-                        }
-                        ?>
-                      </div>
-                <?php
-                    }
                   }
                 }
                 ?>
+
+
+
 
               </div>
             </div>

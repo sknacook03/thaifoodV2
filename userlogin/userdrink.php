@@ -111,7 +111,14 @@ if (!isset($_SESSION['user_login'])) {
                 <div class="owl-features owl-carousel">
                   <?php
 
-                  $stmt = $conn->query("SELECT * FROM drink JOIN type ON drink.type = type.typeID");
+                  $stmt = $conn->prepare("
+                     SELECT drink.id, drink.name, drink.img, drink.price, type.typeName, 
+                     IF(user_favorites_drink.drink_id IS NOT NULL, 1, 0) AS is_favorite
+                     FROM drink 
+                     LEFT JOIN user_favorites_drink ON drink.id = user_favorites_drink.drink_id AND user_favorites_drink.user_id = :user_id
+                     JOIN type ON drink.type = type.typeID
+                 ");
+                  $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                   $stmt->execute();
                   $drinks = $stmt->fetchAll();
                   if (!$drinks) {
@@ -128,8 +135,13 @@ if (!isset($_SESSION['user_login'])) {
                         </div>
                         <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
                         <ul>
-                        <li><i class="fa fa-star-o star-toggle" data-drink-id="<?= $drink['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
-
+                          <li>
+                            <i class="fa <?= $drink['is_favorite'] ? 'fa-star' : 'fa-star-o'; ?> star-toggle"
+                              data-drink-id="<?= $drink['id']; ?>"
+                              data-user-id="<?= $user_id; ?>"
+                              style="cursor:pointer"></i>
+                            <?= $drink['price']; ?> .-
+                          </li>
                         </ul>
                       </div>
                   <?php  }
@@ -152,7 +164,13 @@ if (!isset($_SESSION['user_login'])) {
                   $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                   $offset = ($currentPage - 1) * $itemsPerPage;
 
-                  $stmt = $conn->prepare("SELECT * FROM drink JOIN type ON drink.type = type.typeID LIMIT :offset, :itemsPerPage");
+                  $stmt = $conn->prepare("
+                  SELECT drink.id, drink.name, drink.img, drink.price, type.typeName, 
+                  IF(user_favorites_drink.drink_id IS NOT NULL, 1, 0) AS is_favorite
+                  FROM drink 
+                  LEFT JOIN user_favorites_drink ON drink.id = user_favorites_drink.drink_id AND user_favorites_drink.user_id = :user_id
+                  JOIN type ON drink.type = type.typeID LIMIT :offset, :itemsPerPage");
+                  $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                   $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
                   $stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
                   $stmt->execute();
@@ -168,8 +186,14 @@ if (!isset($_SESSION['user_login'])) {
                           <img class="zoom" src="../drink/uploads/<?= $drink['img']; ?>" alt="">
                           <h4><?= $drink['name']; ?><br><span>ประเภท : <?= $drink['typeName']; ?></span></h4>
                           <ul>
-                          <li><i class="fa fa-star-o star-toggle" data-drink-id="<?= $drink['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $drink['price']; ?> .-</li>
-                          </ul>
+                          <li>
+                            <i class="fa <?= $drink['is_favorite'] ? 'fa-star' : 'fa-star-o'; ?> star-toggle"
+                              data-drink-id="<?= $drink['id']; ?>"
+                              data-user-id="<?= $user_id; ?>"
+                              style="cursor:pointer"></i>
+                            <?= $drink['price']; ?> .-
+                          </li>
+                        </ul>
                         </div>
                       </div>
                   <?php

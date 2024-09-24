@@ -116,7 +116,14 @@ if (!isset($_SESSION['user_login'])) {
                 <div class="owl-features owl-carousel">
                   <?php
 
-                  $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+                  $stmt = $conn->prepare("
+                                          SELECT food.id, food.name, food.img, food.price, type.typeName, 
+                                          IF(user_favorites.food_id IS NOT NULL, 1, 0) AS is_favorite
+                                          FROM food 
+                                          LEFT JOIN user_favorites ON food.id = user_favorites.food_id AND user_favorites.user_id = :user_id
+                                          JOIN type ON food.type = type.typeID
+                                          ");
+                  $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                   $stmt->execute();
                   $foods = $stmt->fetchAll();
                   if (!$foods) {
@@ -133,8 +140,13 @@ if (!isset($_SESSION['user_login'])) {
                         </div>
                         <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
                         <ul>
-                          <li><i class="fa fa-star-o star-toggle" data-food-id="<?= $food['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $food['price']; ?> .-</li>
-
+                          <li>
+                            <i class="fa <?= $food['is_favorite'] ? 'fa-star' : 'fa-star-o'; ?> star-toggle"
+                              data-food-id="<?= $food['id']; ?>"
+                              data-user-id="<?= $user_id; ?>"
+                              style="cursor:pointer"></i>
+                            <?= $food['price']; ?> .-
+                          </li>
                         </ul>
                       </div>
                   <?php  }
@@ -147,12 +159,20 @@ if (!isset($_SESSION['user_login'])) {
           <!-- ***** Most Popular Start ***** -->
           <!-- *****ประเภทต้ม***** -->
           <?php
-          $stmt = $conn->query("SELECT * FROM food JOIN type ON food.type = type.typeID");
+          $stmt = $conn->prepare("
+    SELECT food.id, food.name, food.img, food.price, food.type, type.typeName, 
+    IF(user_favorites.food_id IS NOT NULL, 1, 0) AS is_favorite
+    FROM food 
+    LEFT JOIN user_favorites ON food.id = user_favorites.food_id AND user_favorites.user_id = :user_id
+    JOIN type ON food.type = type.typeID
+");
+          $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
           $stmt->execute();
           $foods = $stmt->fetchAll();
+
           $groupedFoods = [];
           foreach ($foods as $food) {
-            $typeID = $food['type'];
+            $typeID = $food['type']; // ใช้ 'type' จาก food
             if (!isset($groupedFoods[$typeID])) {
               $groupedFoods[$typeID] = [];
             }
@@ -176,7 +196,6 @@ if (!isset($_SESSION['user_login'])) {
                     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                     $offset = ($currentPage - 1) * $itemsPerPage;
 
-
                     $paginatedFoods = array_slice($typeFoods, $offset, $itemsPerPage);
                     foreach ($paginatedFoods as $food) {
                     ?>
@@ -185,7 +204,14 @@ if (!isset($_SESSION['user_login'])) {
                           <img class="zoom" src="../food/uploads/<?= $food['img']; ?>" alt="">
                           <h4><?= $food['name']; ?><br><span>ประเภท : <?= $food['typeName']; ?></span></h4>
                           <ul>
-                            <li><i class="fa fa-star-o star-toggle" data-food-id="<?= $food['id']; ?>" data-user-id="<?= $user_id; ?>" style="cursor:pointer"></i> <?= $food['price']; ?> .-</li>
+                            <li>
+                              <i class="fa <?= $food['is_favorite'] ? 'fa-star' : 'fa-star-o'; ?> star-toggle"
+                                data-food-id="<?= $food['id']; ?>"
+                                data-user-id="<?= $user_id; ?>"
+                                style="cursor:pointer"></i>
+                              <?= $food['price']; ?> .-
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     <?php } ?>
@@ -199,7 +225,6 @@ if (!isset($_SESSION['user_login'])) {
                     <?php
                     $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
                     $nextPage = $currentPage < $totalPages ? $currentPage + 1 : $totalPages;
-
 
                     $startPage = max(1, $currentPage - 1);
                     $endPage = min($totalPages, $currentPage + 1);
@@ -218,6 +243,7 @@ if (!isset($_SESSION['user_login'])) {
               </div>
             </div>
           <?php } ?>
+
           <!-- ***** Most Popular End ***** -->
 
 
